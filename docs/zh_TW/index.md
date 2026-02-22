@@ -11,10 +11,10 @@ hero:
   actions:
     - theme: brand
       text: 下載安裝
-      link: /zh_TW/guide/installation
+      link: ./guide/installation
     - theme: alt
       text: 開始旅程
-      link: /zh_TW/guide/getting-started
+      link: ./guide/getting-started
 
 teaser:
   title: '重新定義交互。'
@@ -41,24 +41,30 @@ features:
   - icon: 💬
     title: 引用回覆
     details: 選中即引。上下文精確回覆，溝通更高效。
+  - icon: ↔️
+    title: 對話寬度
+    details: 視野全開。自由調節對話框寬度，程式碼表格完整呈現。
+  - icon: 💾
+    title: 對話導出
+    details: 數據歸你。多種格式一鍵存檔，知識不再流失。
+  - icon: 🍌
+    title: NanoBanana 水印去除
+    details: 無損去水印。讓 AI 生成的瞬間回歸純淨。
   - icon: 📐
     title: 公式複製
     details: 一鍵複製 LaTeX 和 MathML (Word) 源碼。
   - icon: 🧜‍♀️
     title: Mermaid 圖表
     details: 代碼變圖表。流程圖、時序圖、甘特圖一鍵可視化。
-  - icon: 🍌
-    title: NanoBanana 水印去除
-    details: 無損去水印。讓 AI 生成的瞬間回歸純淨。
   - icon: 🏷️
     title: 標籤頁標題同步
     details: 一眼即知。自動將標籤頁標題同步為對話標題。
-  - icon: 💾
-    title: 對話導出
-    details: 數據歸你。多種格式一鍵存檔，知識不再流失。
   - icon: 🗑️
     title: 批次刪除對話
     details: 一鍵清理。選中多個對話，批次刪除，告別繁瑣。
+  - icon: ⚡️
+    title: 預設模型
+    details: 拒絕重複勞動。新建對話自動切換至你最愛的模型。
 ---
 
 <div class="vp-doc" style="text-align: center; margin: 4rem auto 3rem; max-width: 780px; padding: 0 16px;">

@@ -44,15 +44,24 @@
   <a href="./README_ES.md">Español</a> •
   <a href="./README_PT.md">Português</a> •
   <a href="./README_RU.md">Русский</a> •
-  <a href="./README_AR.md">العربية</a>
+  <a href="./README_AR.md">العربية</a> •
+  <a href="./README_KO.md">한국어</a>
 </p>
 
 <p align="center">
     <img src="https://count.getloli.com/@gemini-voyager?name=gemini-voyager&theme=rule34&padding=7&offset=0&align=top&scale=1&pixelated=1&darkmode=auto" width="400">
   </p>
 
-> [!CAUTION]
-> **作者より声明**：当プロジェクトは、LLM ミラーサイト、違法な製品、またはユーザーのプライバシー漏洩に関わる製品からのスポンサーシップや広告は一切**受け付けません**。
+<p align="center">
+  <a href="https://x.com/Nag1ovo/status/2024507762483277927?s=20" target="_blank">
+    <img src="../docs/public/assets/x-recommendation.png" alt="KOL Recommendation" width="800">
+  </a>
+  <br>
+  <b>🎉 トップテックKOLやコミュニティから強く推奨されています！</b>
+</p>
+
+> [!NOTE]
+> もし Gemini Voyager が役に立っているなら、X、YouTube、Reddit などで共有してもらえると嬉しいです。シェアが増えるほど、このプロジェクトをより多くの人に届けられ、Gemini の体験改善にもつながります。ありがとう。
 
 ---
 
@@ -62,29 +71,42 @@
 
 それが **Gemini Voyager** を開発した理由です。これは単なるツールではなく、AI との会話を整理し、アクセスしやすく、生産的にするためのパートナーです。多くのスレッドを扱う研究者、コードを保存したい開発者、あるいは単に整理整頓が好きな方、Voyager はあなたのための拡張機能です。
 
+<p align="center">
+  <a href="https://x.com/Nag1ovo/status/2024509398601597412?s=20" target="_blank">
+    <img src="../docs/public/assets/try-voyager.png" alt="Try Voyager" width="800">
+  </a>
+  <br>
+  <i>2月18日にGoogle Gemini Appが一部のユーザーの履歴会話にアクセスできなくなる問題を引き起こした際、Voyagerのユーザーは引き続きフォルダ内に保存された会話を見ることができました。</i>
+</p>
+
 ---
 
 ## ✨ 主な機能
 
-<div align="center">
-  <img src="../docs/public/assets/teaser.png" alt="teaser"/>
-</div>
+### 🌌 共通コア (Gemini & AI Studio)
 
-詳細は [公式ドキュメント](https://voyager.nagi.fun/ja) をご覧ください。
+- **📂 [フォルダ管理](https://voyager.nagi.fun/ja/guide/folders)**: **階層構造**、**ドラッグ＆ドロップによる並べ替え**、**Google ドライブ同期**をサポート。
+  - **Gemini**: **マルチアカウント分離モード**と**カスタムフォルダカラー**をサポート。
+- **💡 [プロンプト管理](https://voyager.nagi.fun/ja/guide/prompts)**: プロンプトを保存して再利用。Gemini、AI Studio、[カスタムサイト](https://voyager.nagi.fun/ja/guide/custom-websites)で使用可能。
+- **☁️ [クラウド同期](https://voyager.nagi.fun/ja/guide/cloud-sync)**: フォルダとプロンプトを Google ドライブに同期します。
+- **📐 数式コピー**: LaTeX および MathML (Word) のソースコードを一クリックでコピー。
+
+### ✨ Gemini 専用機能
 
 - **📍 [タイムライン](https://voyager.nagi.fun/ja/guide/timeline)**: 会話構造を可視化し、メッセージ間を瞬時に移動。重要なメッセージのスター保存も可能。
-- **📂 [フォルダ管理](https://voyager.nagi.fun/ja/guide/folders)**: ドラッグ＆ドロップでチャットを整理。2 段階の階層構造をサポート。
-- **💡 [プロンプト管理](https://voyager.nagi.fun/ja/guide/prompts)**: 最高のプロンプトを保存して再利用。Gemini 以外にも、[カスタムサイト](https://voyager.nagi.fun/ja/guide/custom-websites)で使用可能。
 - **💾 [エクスポート](https://voyager.nagi.fun/ja/guide/export)**: 会話を JSON、Markdown、PDF 形式で保存（画像込み）。
+- **🧜‍♀️ [Mermaid レンダリング](https://voyager.nagi.fun/ja/guide/mermaid)**: フローチャート、シーケンス図、その他の Mermaid チャートを自動レンダリングします。
+- **📝 [Markdown レンダリングの修正](https://voyager.nagi.fun/ja/guide/markdown-fix)**: Gemini が挿入した HTML 要素によって壊れた Markdown の太字構文を自動的に修正します。
 - **🍌 [NanoBanana](https://voyager.nagi.fun/ja/guide/nanobanana)**: Gemini で生成された画像からウォーターマークを自動除去。
-- **🧜‍♀️ [Mermaid レンダリング](https://voyager.nagi.fun/ja/guide/mermaid)**: フローチャートやシーケンス図などを自動表示。
 - **🔬 [Deep Research](https://voyager.nagi.fun/ja/guide/deep-research)**: 思考プロセスやリサーチリンクを Markdown で抽出。
-- **📐 数式コピー**: LaTeX および MathML (Word) のソースコードを一クリックでコピー。
 - **🛠️ パワーツール**:
   - **[一括削除](https://voyager.nagi.fun/ja/guide/batch-delete)**: 履歴をまとめてクリーンアップ。
   - **[引用返信](https://voyager.nagi.fun/ja/guide/quote-reply)**: テキストを選択してワンクリックで引用。
   - **[タブタイトルの同期](https://voyager.nagi.fun/ja/guide/tab-title)**: タブの名前をチャットのタイトルに自動変更。
+  - **[自動スクロール防止](https://voyager.nagi.fun/ja/guide/prevent-auto-scroll)**: 新しいプロンプトを送信する際の迷惑なジャンプ動作を阻止します。
   - **[入力欄の自動非表示](https://voyager.nagi.fun/ja/guide/input-collapse)**: 未入力時に折りたたんで表示スペースを確保。
+  - **[デフォルトモデル](https://voyager.nagi.fun/ja/guide/default-model)**: 新しい対話に使用するデフォルトのモデルを設定します。
+  - **[最近の項目と Gem を非表示](https://voyager.nagi.fun/ja/guide/recents-hider)**: サイドバーの「最近」リストを非表示にして、集中力を高めます。
 
 ---
 
@@ -93,7 +115,7 @@
 > ⚠️ 注意：プロンプト管理のみが Gemini for Enterprise をサポートしています。
 
 <div align="center">
-  <a href="https://chromewebstore.google.com/detail/kjdpnimcnfinmilocccippmododhceol" target="_blank">
+  <a href="https://chromewebstore.google.com/detail/kjdpnimcnfinmilocccippmododhceol?utm_source=github&utm_medium=readme&utm_campaign=organic_growth&utm_content=ja" target="_blank">
     <img src="https://img.shields.io/badge/Chrome%20ストア-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Chrome Web Store" height="36">
   </a>
   &nbsp;&nbsp;
@@ -104,13 +126,17 @@
   <a href="https://addons.mozilla.org/firefox/addon/gemini-voyager/" target="_blank">
     <img src="https://img.shields.io/badge/Firefox%20アドオン-FF7139?style=for-the-badge&logo=firefox&logoColor=white" alt="Firefox Add-ons" height="36">
   </a>
+  &nbsp;&nbsp;
+  <a href="https://github.com/Nagi-ovo/gemini-voyager/releases/latest/" target="_blank">
+    <img src="https://img.shields.io/badge/Safari-000000?style=for-the-badge&logo=safari&logoColor=white" alt="Safari ダウンロード" height="36">
+  </a>
 </div>
 
 <p align="center">
   <sub><b>Chrome ストア版</b>は Edge, Opera, Brave, Vivaldi, Arc などの Chromium 系ブラウザでも動作します。</sub>
 </p>
 
-> **ストア状況:** Chrome ✅ · Firefox ✅ · Edge ✅ · Safari (近日公開)
+> **ストア状況:** Chrome ✅ · Firefox ✅ · Edge ✅ · Safari ✅
 
 **手動インストール**や**開発用ビルド**については、[インストールガイド](https://voyager.nagi.fun/ja/guide/installation)を参照してください。
 
@@ -217,5 +243,5 @@ Gemini Voyager をより良くするために協力してくださり、あり�
    </picture>
   </a>
   <p>Made with ❤️ by Jesse Zhang</p>
-  <sub>MIT License © 2025</sub>
+  <sub>GPLv3 License © 2026</sub>
 </div>

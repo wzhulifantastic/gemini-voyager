@@ -12,6 +12,7 @@
  * - Sends image data to this content script for watermark removal
  * - Returns processed image to complete the download
  */
+import { isExtensionContextInvalidatedError } from '@/core/utils/extensionContext';
 import { getTranslationSync } from '@/utils/i18n';
 import type { TranslationKey } from '@/utils/translations';
 
@@ -96,7 +97,7 @@ const findGeminiImages = (): HTMLImageElement[] =>
  */
 const replaceWithNormalSize = (src: string): string => {
   // Use normal size image to fit watermark
-  return src.replace(/=s\d+(?=[-?#]|$)/, '=s0');
+  return src.replace(/=s\d+[^?#]*/, '=s0');
 };
 
 /**
@@ -338,6 +339,9 @@ export async function startWatermarkRemover(): Promise<void> {
 
     console.log('[Gemini Voyager] Watermark remover ready');
   } catch (error) {
+    if (isExtensionContextInvalidatedError(error)) {
+      return;
+    }
     console.error('[Gemini Voyager] Watermark remover initialization failed:', error);
   }
 }
@@ -346,6 +350,9 @@ let statusToastManager: StatusToastManager | null = null;
 let downloadTrackingReady = false;
 let lastImmediateToastAt = 0;
 let sequenceCounter = 0;
+
+const LARGE_WARNING_AUTO_DISMISS_MS = 8000;
+const PROCESSING_FALLBACK_AUTO_DISMISS_MS = 35000;
 
 type DownloadToastSequence = {
   id: number;
@@ -378,7 +385,6 @@ function showImmediateDownloadToast(button: HTMLButtonElement): void {
   manager.setAnchorElement(button);
 
   const downloadMessage = t('downloadingOriginal', '正在下载原始图片');
-  const warningMessage = t('downloadLargeWarning', '大文件警告');
   const processingMessage = t('downloadProcessing', '正在处理水印中');
 
   if (activeSequence?.processingTimer) {
@@ -387,7 +393,6 @@ function showImmediateDownloadToast(button: HTMLButtonElement): void {
 
   const sequenceId = ++sequenceCounter;
   const downloadToastId = manager.addToast(downloadMessage, 'info', { autoDismissMs: 3000 });
-  const warningToastId = manager.addToast(warningMessage, 'warning');
 
   const processingTimer = setTimeout(() => {
     if (!activeSequence || activeSequence.id !== sequenceId) return;
@@ -398,6 +403,7 @@ function showImmediateDownloadToast(button: HTMLButtonElement): void {
     if (!activeSequence.processingToastId) {
       activeSequence.processingToastId = manager.addToast(processingMessage, 'info', {
         pending: true,
+        autoDismissMs: PROCESSING_FALLBACK_AUTO_DISMISS_MS,
       });
     }
   }, 3000);
@@ -405,7 +411,7 @@ function showImmediateDownloadToast(button: HTMLButtonElement): void {
   activeSequence = {
     id: sequenceId,
     downloadToastId,
-    warningToastId,
+    warningToastId: null,
     processingToastId: null,
     processingTimer,
   };
@@ -432,6 +438,7 @@ function setupStatusListener(): void {
   const bridge = getBridgeElement();
   const manager = getStatusToastManager();
   const downloadMessage = t('downloadingOriginal', '正在下载原始图片');
+  const downloadLargeMessage = t('downloadingOriginalLarge', '正在下载原始图片（大文件）');
   const warningMessage = t('downloadLargeWarning', '大文件警告');
   const processingMessage = t('downloadProcessing', '正在处理水印中');
   const successMessage = t('downloadSuccess', '正在下载');
@@ -485,13 +492,14 @@ function setupStatusListener(): void {
         case 'DOWNLOADING':
           // Step 1: Downloading original image
           if (activeSequence) {
+            if (activeSequence.warningToastId) {
+              manager.removeToast(activeSequence.warningToastId);
+              activeSequence.warningToastId = null;
+            }
             if (!activeSequence.downloadToastId) {
               activeSequence.downloadToastId = manager.addToast(downloadMessage, 'info', {
                 autoDismissMs: 3000,
               });
-            }
-            if (!activeSequence.warningToastId) {
-              activeSequence.warningToastId = manager.addToast(warningMessage, 'warning');
             }
           }
           break;
@@ -499,12 +507,16 @@ function setupStatusListener(): void {
           // Step 1 with large file warning
           if (activeSequence) {
             if (!activeSequence.downloadToastId) {
-              activeSequence.downloadToastId = manager.addToast(downloadMessage, 'info', {
+              activeSequence.downloadToastId = manager.addToast(downloadLargeMessage, 'info', {
                 autoDismissMs: 3000,
               });
+            } else {
+              manager.updateToast(activeSequence.downloadToastId, downloadLargeMessage, 'info');
             }
             if (!activeSequence.warningToastId) {
-              activeSequence.warningToastId = manager.addToast(warningMessage, 'warning');
+              activeSequence.warningToastId = manager.addToast(warningMessage, 'warning', {
+                autoDismissMs: LARGE_WARNING_AUTO_DISMISS_MS,
+              });
             }
           }
           break;
@@ -517,6 +529,7 @@ function setupStatusListener(): void {
           if (!activeSequence?.processingTimer) {
             const processingToastId = manager.addToast(processingMessage, 'info', {
               pending: true,
+              autoDismissMs: PROCESSING_FALLBACK_AUTO_DISMISS_MS,
             });
             if (activeSequence) activeSequence.processingToastId = processingToastId;
           }

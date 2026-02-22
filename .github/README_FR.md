@@ -44,15 +44,24 @@
   <a href="./README_ES.md">Español</a> •
   <a href="./README_PT.md">Português</a> •
   <a href="./README_RU.md">Русский</a> •
-  <a href="./README_AR.md">العربية</a>
+  <a href="./README_AR.md">العربية</a> •
+  <a href="./README_KO.md">한국어</a>
 </p>
 
 <p align="center">
     <img src="https://count.getloli.com/@gemini-voyager?name=gemini-voyager&theme=rule34&padding=7&offset=0&align=top&scale=1&pixelated=1&darkmode=auto" width="400">
   </p>
 
-> [!CAUTION]
-> **Déclaration de l'auteur** : Ce projet n'accepte **aucune** forme de parrainage ou de publicité provenant de sites miroirs LLM, de produits illégaux ou de produits impliquant des fuites de données privées.
+<p align="center">
+  <a href="https://x.com/Nag1ovo/status/2024507762483277927?s=20" target="_blank">
+    <img src="../docs/public/assets/x-recommendation.png" alt="KOL Recommendation" width="800">
+  </a>
+  <br>
+  <b>🎉 Fortement recommandé par les meilleurs influenceurs tech !</b>
+</p>
+
+> [!NOTE]
+> Si Gemini Voyager vous est utile, partagez-le sur X, Reddit, YouTube, etc. Chaque partage aide plus de personnes à découvrir le projet et à améliorer l'expérience Gemini. Merci.
 
 ---
 
@@ -62,29 +71,42 @@ Nous adorons Gemini, mais nous aimerions parfois qu'il soit un peu plus "ordonn�
 
 C'est pourquoi nous avons créé **Gemini Voyager**. Plus qu'un simple outil, c'est un compagnon qui vous aide à garder vos conversations IA organisées, accessibles et productives. Que vous soyez un chercheur gérant des dizaines de fils, un développeur sauvegardant des extraits de code, ou simplement quelqu'un qui aime l'ordre, Voyager est fait pour vous.
 
+<p align="center">
+  <a href="https://x.com/Nag1ovo/status/2024509398601597412?s=20" target="_blank">
+    <img src="../docs/public/assets/try-voyager.png" alt="Try Voyager" width="800">
+  </a>
+  <br>
+  <i>Lors du problème du 18 février où l'application Google Gemini a rendu inaccessibles les conversations historiques de certains utilisateurs, les utilisateurs de Voyager ont toujours pu voir leurs conversations enregistrées dans leurs dossiers.</i>
+</p>
+
 ---
 
 ## ✨ Fonctionnalités
 
-<div align="center">
-  <img src="../docs/public/assets/teaser.png" alt="teaser"/>
-</div>
+### 🌌 Noyau Commun (Gemini & AI Studio)
 
-Pour un guide complet, visitez notre [Documentation](https://voyager.nagi.fun/fr).
+- **📂 [Dossiers](https://voyager.nagi.fun/fr/guide/folders)** : Organisez vos chats dans une hiérarchie à deux niveaux avec support du **glisser-déposer** et **synchronisation Google Drive**.
+  - **Gemini** : Support du **mode d'isolation de compte** et **couleurs de dossiers personnalisées**.
+- **💡 [Coffre-fort de Prompts](https://voyager.nagi.fun/fr/guide/prompts)** : Enregistrez et réutilisez vos meilleurs prompts sur Gemini, AI Studio et [sites personnalisés](https://voyager.nagi.fun/fr/guide/custom-websites).
+- **☁️ [Sincronisation Cloud](https://voyager.nagi.fun/fr/guide/cloud-sync)** : Synchronisez vos dossiers et coffre-fort de prompts avec Google Drive.
+- **📐 Copie de Formules**: Copie en un clic des codes sources LaTeX et MathML (Word).
+
+### ✨ Fonctions Exclusives Gemini
 
 - **📍 [Navigation Temporelle](https://voyager.nagi.fun/fr/guide/timeline)** : Des nœuds visuels pour naviguer entre les messages, marquer les moments clés et gérer les branches de conversation.
-- **📂 [Dossiers](https://voyager.nagi.fun/fr/guide/folders)** : Organisez vos chats dans une hiérarchie à deux niveaux avec support du glisser-déposer.
-- **💡 [Coffre-fort de Prompts](https://voyager.nagi.fun/fr/guide/prompts)** : Enregistrez et réutilisez vos meilleurs prompts sur Gemini, AI Studio et [sites personnalisés](https://voyager.nagi.fun/fr/guide/custom-websites).
 - **💾 [Export de Chat](https://voyager.nagi.fun/fr/guide/export)** : Exportez vos conversations en JSON, Markdown ou PDF avec les images incluses.
+- **🧜‍♀️ [Rendu Mermaid](https://voyager.nagi.fun/fr/guide/mermaid)**: Rendu automatique des organigrammes, diagrammes de séquence et autres graphiques Mermaid.
+- **📝 [Correction du Rendu Markdown](https://voyager.nagi.fun/fr/guide/markdown-fix)**: Répare automatiquement la syntaxe Markdown grasse corrompue par les éléments HTML injectés par Gemini.
 - **🍌 [NanoBanana](https://voyager.nagi.fun/fr/guide/nanobanana)** : Suppression sans perte du filigrane Gemini sur les images générées.
-- **🧜‍♀️ [Rendu Mermaid](https://voyager.nagi.fun/fr/guide/mermaid)** : Rendu automatique des diagrammes Mermaid (flux, séquences, etc.).
 - **🔬 [Deep Research](https://voyager.nagi.fun/fr/guide/deep-research)** : Extrayez les processus de réflexion et les liens de recherche des sessions Deep Research.
-- **📐 Copie de Formules**: Copie en un clic des codes sources LaTeX et MathML (Word).
 - **🛠️ Outils de Productivité** :
   - **[Suppression par Lot](https://voyager.nagi.fun/fr/guide/batch-delete)** : Nettoyage massif de votre historique.
   - **[Réponse avec Citation](https://voyager.nagi.fun/fr/guide/quote-reply)** : Répondez avec contexte en sélectionnant simplement du texte.
   - **[Synchro Titre Onglet](https://voyager.nagi.fun/fr/guide/tab-title)** : Synchronisation automatique du titre de l'onglet avec le titre du chat.
+  - **[Empêcher le défilement auto](https://voyager.nagi.fun/fr/guide/prevent-auto-scroll)** : Intercepte le saut incontrôlé vers le bas de la page.
   - **[Réduction Entrée](https://voyager.nagi.fun/fr/guide/input-collapse)** : Zone de saisie auto-réductible pour plus d'espace de lecture.
+  - **[Modèle par Défaut](https://voyager.nagi.fun/fr/guide/default-model)** : Définissez votre modèle préféré par défaut.
+  - **[Masquer les éléments récents et Gems](https://voyager.nagi.fun/fr/guide/recents-hider)** : Masquer la liste "Récents" dans la barre latérale pour réduire les distractions.
 
 ---
 
@@ -93,7 +115,7 @@ Pour un guide complet, visitez notre [Documentation](https://voyager.nagi.fun/fr
 > ⚠️ Note : Le Gestionnaire de Prompts est la seule fonctionnalité supportant Gemini for Enterprise.
 
 <div align="center">
-  <a href="https://chromewebstore.google.com/detail/kjdpnimcnfinmilocccippmododhceol" target="_blank">
+  <a href="https://chromewebstore.google.com/detail/kjdpnimcnfinmilocccippmododhceol?utm_source=github&utm_medium=readme&utm_campaign=organic_growth&utm_content=fr" target="_blank">
     <img src="https://img.shields.io/badge/Chrome%20Web%20Store-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Chrome Web Store" height="36">
   </a>
   &nbsp;&nbsp;
@@ -104,13 +126,17 @@ Pour un guide complet, visitez notre [Documentation](https://voyager.nagi.fun/fr
   <a href="https://addons.mozilla.org/firefox/addon/gemini-voyager/" target="_blank">
     <img src="https://img.shields.io/badge/Firefox%20Add--ons-FF7139?style=for-the-badge&logo=firefox&logoColor=white" alt="Firefox Add-ons" height="36">
   </a>
+  &nbsp;&nbsp;
+  <a href="https://github.com/Nagi-ovo/gemini-voyager/releases/latest/" target="_blank">
+    <img src="https://img.shields.io/badge/Safari-000000?style=for-the-badge&logo=safari&logoColor=white" alt="Safari Télécharger" height="36">
+  </a>
 </div>
 
 <p align="center">
   <sub>Le <b>Chrome Web Store</b> fonctionne aussi sur Edge, Opera, Brave, Vivaldi, Arc et autres navigateurs Chromium.</sub>
 </p>
 
-> **Statut des Stores :** Chrome ✅ · Firefox ✅ · Edge ✅ · Safari (Prochainement)
+> **Statut des Stores :** Chrome ✅ · Firefox ✅ · Edge ✅ · Safari ✅
 
 Pour une **installation manuelle** ou des **builds de développement**, veuillez vous référer au [Guide d'Installation](https://voyager.nagi.fun/fr/guide/installation).
 
@@ -197,5 +223,5 @@ Merci d'aider à rendre Gemini Voyager meilleur ! ❤️
    </picture>
   </a>
   <p>Fait avec ❤️ par Jesse Zhang</p>
-  <sub>MIT License © 2025</sub>
+  <sub>GPLv3 License © 2026</sub>
 </div>

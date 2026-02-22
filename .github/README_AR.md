@@ -44,15 +44,24 @@
   <a href="./README_FR.md">Français</a> •
   <a href="./README_ES.md">Español</a> •
   <a href="./README_PT.md">Português</a> •
-  <a href="./README_RU.md">Русский</a>
+  <a href="./README_RU.md">Русский</a> •
+  <a href="./README_KO.md">한국어</a>
 </p>
 
 <p align="center">
     <img src="https://count.getloli.com/@gemini-voyager?name=gemini-voyager&theme=rule34&padding=7&offset=0&align=top&scale=1&pixelated=1&darkmode=auto" width="400">
   </p>
 
-> [!CAUTION]
-> **بيان المؤلف**: هذا المشروع **لا يقبل** أي شكل من أشكال الرعاية أو الإعلانات من مواقع مرآة LLM، أو المنتجات غير القانونية، أو المنتجات التي تنطوي على تسريب خصوصية المستخدم.
+<p align="center">
+  <a href="https://x.com/Nag1ovo/status/2024507762483277927?s=20" target="_blank">
+    <img src="../docs/public/assets/x-recommendation.png" alt="KOL Recommendation" width="800">
+  </a>
+  <br>
+  <b>🎉 نوصي به بشدة من قبل كبار المؤثرين في مجال التكنولوجيا والمجتمع!</b>
+</p>
+
+> [!NOTE]
+> إذا كان Gemini Voyager مفيداً لك، فشاركْه على X أو Reddit أو YouTube إلخ. كل مشاركة تساعد المزيد من الناس على اكتشاف المشروع وتحسين تجربة Gemini. شكراً.
 
 ---
 
@@ -62,29 +71,42 @@
 
 لهذا السبب قمنا ببناء **Gemini Voyager**. إنه ليس مجرد أداة؛ إنه رفيق يساعدك في الحفاظ على تنظيم محادثاتك مع الذكاء الاصطناعي وجعلها سهلة الوصول ومنتجة. سواء كنت باحثاً تدير عشرات الخيوط، أو مطوراً يحفظ مقتطفات برمجية، أو مجرد شخص يحب النظام، فإن Voyager مصمم لك.
 
+<p align="center">
+  <a href="https://x.com/Nag1ovo/status/2024509398601597412?s=20" target="_blank">
+    <img src="../docs/public/assets/try-voyager.png" alt="Try Voyager" width="800">
+  </a>
+  <br>
+  <i>خلال المشكلة التي حدثت في 18 فبراير حيث تسبب تطبيق Google Gemini في جعل المحادثات التاريخية لبعض المستخدمين غير قابلة للوصول، تمكن مستخدمو Voyager من الاستمرار في رؤية محادثاتهم المحفوظة في مجلداتهم.</i>
+</p>
+
 ---
 
 ## ✨ الميزات
 
-<div align="center">
-  <img src="../docs/public/assets/teaser.png" alt="teaser"/>
-</div>
+### 🌌 الميزات الأساسية (Gemini & AI Studio)
 
-للحصول على دليل كامل، قم بزيارة [التوثيق الخاص بنا](https://voyager.nagi.fun/ar).
+- **📂 [تنظيم المجلدات](https://voyager.nagi.fun/ar/guide/folders)**: نظم دردشاتك في تسلسل هرمي للمجلدات مع دعم **السحب والإفلات** و **مزامنة Google Drive**.
+  - **Gemini**: يدعم **وضع عزل الحساب** و **ألوان المجلدات المخصصة**.
+- **💡 [مستودع المطالبات](https://voyager.nagi.fun/ar/guide/prompts)**: احفظ وأعد استخدام أفضل مطالباتك في Gemini و AI Studio و[المواقع المخصصة](https://voyager.nagi.fun/ar/guide/custom-websites).
+- **☁️ [المزامنة السحابية](https://voyager.nagi.fun/ar/guide/cloud-sync)**: قم بمزامنة المجلدات ومستودع المطالبات مع Google Drive.
+- **📐 نسخ الصيغ**: نسخ بنقرة واحدة لأكواد المصدر LaTeX و MathML (Word).
+
+### ✨ ميزات Gemini الحصرية
 
 - **📍 [تصفح الجدول الزمني](https://voyager.nagi.fun/ar/guide/timeline)**: عقد بصرية للتنقل بين الرسائل، وتمييز اللحظات الرئيسية، وإدارة فروع المحادثة.
-- **📂 [تنظيم المجلدات](https://voyager.nagi.fun/ar/guide/folders)**: نظم دردشاتك في تسلسل هرمي للمجلدات من مستويين مع دعم السحب والإفلات.
-- **💡 [مستودع المطالبات](https://voyager.nagi.fun/ar/guide/prompts)**: احفظ وأعد استخدام أفضل مطالباتك في Gemini و AI Studio و[المواقع المخصصة](https://voyager.nagi.fun/ar/guide/custom-websites).
 - **💾 [تصدير الدردشة](https://voyager.nagi.fun/ar/guide/export)**: صَدّر المحادثات إلى تنسيقات JSON أو Markdown أو PDF مع تضمين الصور.
-- **🍌 [NanoBanana](https://voyager.nagi.fun/ar/guide/nanobanana)**: إزالة العلامة المائية بدون فقدان الجودة للصور التي ينتجها Gemini.
 - **🧜‍♀️ [رسم Mermaid](https://voyager.nagi.fun/ar/guide/mermaid)**: عرض تلقائي للمخططات الانسيابية ومخططات التتابع وغيرها من رسوم Mermaid.
+- **📝 [إصلاح عرض Markdown](https://voyager.nagi.fun/ar/guide/markdown-fix)**: إصلاح تلقائي لتنسيق Markdown العريض الذي تعطل بسبب عناصر HTML التي أدرجها Gemini.
+- **🍌 [NanoBanana](https://voyager.nagi.fun/ar/guide/nanobanana)**: إزالة العلامة المائية بدون فقدان الجودة للصور التي ينتجها Gemini.
 - **🔬 [البحث العميق](https://voyager.nagi.fun/ar/guide/deep-research)**: استخرج عمليات التفكير وروابط البحث من جلسات البحث العميق.
-- **📐 نسخ الصيغ**: نسخ بنقرة واحدة لأكواد المصدر LaTeX و MathML (Word).
 - **🛠️ أدوات القوة**:
   - **[الحذف الجماعي](https://voyager.nagi.fun/ar/guide/batch-delete)**: تنظيف السجل الخاص بك دفعة واحدة.
   - **[الرد مع اقتباس](https://voyager.nagi.fun/ar/guide/quote-reply)**: الرد مع السياق عن طريق تحديد النص.
   - **[مزامنة عنوان علامة التبويب](https://voyager.nagi.fun/ar/guide/tab-title)**: مزامنة عنوان علامة تبويب المتصفح تلقائياً مع عنوان الدردشة.
+  - **[منع التمرير التلقائي](https://voyager.nagi.fun/ar/guide/prevent-auto-scroll)**: يمنع الصفحة من النزول تلقائياً إلى الأسفل.
   - **[طي الإدخال](https://voyager.nagi.fun/ar/guide/input-collapse)**: منطقة إدخال قابلة للطي تلقائياً لتوفير مساحة قراءة أكبر.
+  - **[النموذج الافتراضي](https://voyager.nagi.fun/ar/guide/default-model)**: تعيين النموذج المفضل لديك كنموذج افتراضي.
+  - **[إخفاء العناصر الأخيرة والـ Gems](https://voyager.nagi.fun/ar/guide/recents-hider)**: إخفاء قائمة "الأخيرة" في الشريط الجانبي لتقليل التشتت.
 
 ---
 
@@ -93,7 +115,7 @@
 > ⚠️ ملاحظة: مدير المطالبات هو الميزة الوحيدة التي تدعم Gemini للمؤسسات.
 
 <div align="center">
-  <a href="https://chromewebstore.google.com/detail/kjdpnimcnfinmilocccippmododhceol" target="_blank">
+  <a href="https://chromewebstore.google.com/detail/kjdpnimcnfinmilocccippmododhceol?utm_source=github&utm_medium=readme&utm_campaign=organic_growth&utm_content=ar" target="_blank">
     <img src="https://img.shields.io/badge/Chrome%20Web%20Store-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Chrome Web Store" height="36">
   </a>
   &nbsp;&nbsp;
@@ -104,13 +126,17 @@
   <a href="https://addons.mozilla.org/firefox/addon/gemini-voyager/" target="_blank">
     <img src="https://img.shields.io/badge/Firefox%20Add--ons-FF7139?style=for-the-badge&logo=firefox&logoColor=white" alt="Firefox Add-ons" height="36">
   </a>
+  &nbsp;&nbsp;
+  <a href="https://github.com/Nagi-ovo/gemini-voyager/releases/latest/" target="_blank">
+    <img src="https://img.shields.io/badge/Safari-000000?style=for-the-badge&logo=safari&logoColor=white" alt="Safari تنزيل" height="36">
+  </a>
 </div>
 
 <p align="center">
-  <sub>متجر <b>Chrome Web Store</b> يعمل أيضاً على متصفحات Edge و Opera و Brave و Vivaldi و Arc وغيرها من المتصفحات القائمة على Chromium.</sub>
+  <sub>سوق <b>Chrome</b> الإلكتروني يعمل أيضاً على Edge و Opera و Brave و Vivaldi و Arc ومتصفحات Chromium الأخرى.</sub>
 </p>
 
-> **حالة المتجر:** Chrome ✅ · Firefox ✅ · Edge ✅ · Safari (قريباً)
+> **حالة المتجر:** Chrome ✅ · Firefox ✅ · Edge ✅ · Safari ✅
 
 لـ **التثبيت اليدوي** أو **بناء التطوير**، يرجى الرجوع إلى [دليل التثبيت](https://voyager.nagi.fun/ar/guide/installation).
 
@@ -197,5 +223,5 @@
    </picture>
   </a>
   <p>صنع بكل ❤️ بواسطة Jesse Zhang</p>
-  <sub>رخصة MIT © 2025</sub>
+  <sub>رخصة GPLv3 © 2025</sub>
 </div>

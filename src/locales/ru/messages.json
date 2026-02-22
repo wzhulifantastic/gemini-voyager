@@ -4,7 +4,7 @@
     "description": "Extension name"
   },
   "extDescription": {
-    "message": "Улучшите свой опыт работы с Gemini с помощью навигации по таймлайну, организации папок, хранилища промптов и экспорта чатов.",
+    "message": "Улучшите опыт Gemini: таймлайн, папки, промпты и экспорт чатов.",
     "description": "Extension description"
   },
   "scrollMode": {
@@ -228,7 +228,7 @@
     "description": "Official docs link"
   },
   "exportChatJson": {
-    "message": "Экспорт истории чата",
+    "message": "Экспорт истории диалога",
     "description": "Tooltip for export button"
   },
   "folder_title": {
@@ -298,6 +298,10 @@
   "folder_color_pink": {
     "message": "Розовый",
     "description": "Pink folder color name"
+  },
+  "folder_color_custom": {
+    "message": "Пользовательский",
+    "description": "Custom folder color name"
   },
   "folder_empty": {
     "message": "Папок пока нет",
@@ -383,9 +387,25 @@
     "message": "LaTeX (без знака доллара)",
     "description": "LaTeX format option without dollar signs"
   },
+  "folder_filter_current_user": {
+    "message": "Изоляция аккаунтов",
+    "description": "Show only conversations from the current Google account"
+  },
   "folder_export": {
     "message": "Экспорт папок",
     "description": "Export folders button tooltip"
+  },
+  "folder_import_export": {
+    "message": "Импорт/Экспорт папок",
+    "description": "Combined import/export button tooltip"
+  },
+  "folder_cloud_upload": {
+    "message": "Загрузить в облако",
+    "description": "Cloud upload button tooltip"
+  },
+  "folder_cloud_sync": {
+    "message": "Синхронизировать из облака",
+    "description": "Cloud sync button tooltip"
   },
   "folder_import": {
     "message": "Импорт папок",
@@ -444,8 +464,32 @@
     "description": "Export format selection label"
   },
   "export_dialog_warning": {
-    "message": "⚠️ Из-за ленивой загрузки старых сообщений в Gemini, пожалуйста, используйте таймлайн, чтобы перейти к первому сообщению разговора перед экспортом. В противном случае экспорт может быть неполным.",
-    "description": "Warning about lazy loading affecting export completeness"
+    "message": "⚠️ После нажатия на экспорт система автоматически перейдет к первому сообщению для загрузки всего контента. Пожалуйста, не совершайте никаких действий; экспорт продолжится автоматически после перехода.",
+    "description": "Warning about auto-jump and loading completeness"
+  },
+  "export_dialog_safari_cmdp_hint": {
+    "message": "Совет для Safari: нажмите «Экспорт» ниже, подождите немного, затем нажмите ⌘P и выберите «Сохранить как PDF».",
+    "description": "Safari-specific hint for PDF export"
+  },
+  "export_toast_safari_pdf_ready": {
+    "message": "Теперь можно нажать Command + P, чтобы экспортировать PDF.",
+    "description": "Safari-specific toast shown after PDF export is prepared"
+  },
+  "export_dialog_safari_markdown_hint": {
+    "message": "Примечание: из-за ограничений Safari изображения из истории чата извлечь нельзя. Для полного экспорта используйте экспорт в PDF.",
+    "description": "Warning about image references in Safari markdown export"
+  },
+  "export_format_json_description": {
+    "message": "Машиночитаемый формат для разработчиков",
+    "description": "Description for JSON export format"
+  },
+  "export_format_markdown_description": {
+    "message": "Чистый текстовый формат (рекомендуется)",
+    "description": "Description for Markdown export format"
+  },
+  "export_format_pdf_description": {
+    "message": "Формат для печати (через Сохранить как PDF)",
+    "description": "Description for PDF export format"
   },
   "editInputWidth": {
     "message": "Ширина поля ввода",
@@ -747,6 +791,14 @@
     "message": "Cmd/Win",
     "description": "Meta/Command/Windows modifier key"
   },
+  "preventAutoScroll": {
+    "message": "Предотвращение автопрокрутки",
+    "description": "Auto-hide sidebar toggle label"
+  },
+  "preventAutoScrollHint": {
+    "message": "Предотвращает прыжок Gemini вниз при нажатии Enter во время чтения предыдущих ответов.",
+    "description": "Auto-hide sidebar feature hint"
+  },
   "cloudSync": {
     "message": "Облачная синхронизация",
     "description": "Cloud sync section title"
@@ -798,6 +850,22 @@
   "syncInProgress": {
     "message": "Синхронизация...",
     "description": "Sync in progress message"
+  },
+  "uploadInProgress": {
+    "message": "Uploading...",
+    "description": "Upload in progress message"
+  },
+  "uploadSuccess": {
+    "message": "✓ Uploaded successfully",
+    "description": "Upload success message"
+  },
+  "downloadInProgress": {
+    "message": "Downloading...",
+    "description": "Download in progress message"
+  },
+  "downloadMergeSuccess": {
+    "message": "✓ Downloaded and merged",
+    "description": "Download and merge success message"
   },
   "syncUpload": {
     "message": "Загрузить",
@@ -891,13 +959,25 @@
     "message": "Развернуть",
     "description": "Expand children"
   },
+  "timelinePreviewSearch": {
+    "message": "Поиск...",
+    "description": "Timeline preview panel search placeholder"
+  },
+  "timelinePreviewNoResults": {
+    "message": "Нет результатов",
+    "description": "Timeline preview panel no search results"
+  },
+  "timelinePreviewNoMessages": {
+    "message": "Нет сообщений",
+    "description": "Timeline preview panel no messages"
+  },
   "quoteReply": {
     "message": "Цитировать",
     "description": "Quote reply button text"
   },
   "inputCollapseOptions": {
-    "message": "Сворачивание ввода",
-    "description": "Input collapse options section label"
+    "message": "Параметры ввода",
+    "description": "Input options section label"
   },
   "enableInputCollapse": {
     "message": "Включить сворачивание ввода",
@@ -910,6 +990,14 @@
   "inputCollapsePlaceholder": {
     "message": "Сообщение Gemini",
     "description": "Placeholder text shown in collapsed input"
+  },
+  "ctrlEnterSend": {
+    "message": "Ctrl+Enter для отправки",
+    "description": "Ctrl+Enter to send toggle label"
+  },
+  "ctrlEnterSendHint": {
+    "message": "Нажмите Ctrl+Enter для отправки сообщений, Enter для новой строки",
+    "description": "Ctrl+Enter to send feature hint"
   },
   "batch_delete_confirm": {
     "message": "Вы уверены, что хотите удалить {count} разговор(ов)? Это действие нельзя отменить.",
@@ -1026,5 +1114,149 @@
   "downloadError": {
     "message": "Ошибка",
     "description": "Status prefix when download fails"
+  },
+  "recentsHide": {
+    "message": "Скрыть недавние элементы",
+    "description": "Подсказка для скрытия раздела недавних элементов"
+  },
+  "recentsShow": {
+    "message": "Показать недавние элементы",
+    "description": "Подсказка для отображения раздела недавних элементов"
+  },
+  "gemsHide": {
+    "message": "Скрыть Gems",
+    "description": "Подсказка для скрытия раздела списка Gems"
+  },
+  "gemsShow": {
+    "message": "Показать Gems",
+    "description": "Подсказка для отображения раздела списка Gems"
+  },
+  "setAsDefaultModel": {
+    "message": "Set as default model",
+    "description": "Tooltip for setting default model"
+  },
+  "cancelDefaultModel": {
+    "message": "Cancel default model",
+    "description": "Tooltip for cancelling default model"
+  },
+  "defaultModelSet": {
+    "message": "Default model set: $1",
+    "description": "Toast message when default model is set"
+  },
+  "defaultModelCleared": {
+    "message": "Default model cleared",
+    "description": "Toast message when default model is cleared"
+  },
+  "sidebarAutoHide": {
+    "message": "Авто-скрытие боковой панели",
+    "description": "Auto-hide sidebar toggle label"
+  },
+  "sidebarAutoHideHint": {
+    "message": "Автоматически сворачивать боковую панель при уходе мыши, разворачивать при наведении",
+    "description": "Auto-hide sidebar feature hint"
+  },
+  "folderSpacing": {
+    "message": "Расстояние между папками",
+    "description": "Folder spacing adjustment label"
+  },
+  "folderSpacingCompact": {
+    "message": "Компактно",
+    "description": "Compact folder spacing label"
+  },
+  "folderSpacingSpacious": {
+    "message": "Просторно",
+    "description": "Spacious folder spacing label"
+  },
+  "folderTreeIndent": {
+    "message": "Отступ подпапок",
+    "description": "Subfolder tree indentation adjustment label"
+  },
+  "folderTreeIndentCompact": {
+    "message": "Узкий",
+    "description": "Narrow subfolder indentation label"
+  },
+  "folderTreeIndentSpacious": {
+    "message": "Широкий",
+    "description": "Wide subfolder indentation label"
+  },
+  "export_select_mode_select_all": {
+    "message": "Select all",
+    "description": "Selection mode select all toggle"
+  },
+  "export_select_mode_count": {
+    "message": "Selected {count}",
+    "description": "Selection mode selected message count"
+  },
+  "export_select_mode_toggle": {
+    "message": "Select message",
+    "description": "Selection mode per-message toggle tooltip"
+  },
+  "export_select_mode_select_below": {
+    "message": "Select messages below",
+    "description": "Selection mode top-left button to select messages below current line"
+  },
+  "export_select_mode_empty": {
+    "message": "Please select at least one message to export.",
+    "description": "Selection mode validation when nothing is selected"
+  },
+  "export_format_image_description": {
+    "message": "Один PNG-файл, удобно для отправки с мобильного.",
+    "description": "Description for Image export format"
+  },
+  "export_image_progress": {
+    "message": "Generating image...",
+    "description": "Progress message while generating image export"
+  },
+  "deepResearchSaveReport": {
+    "message": "Save Report",
+    "description": "Deep Research save report button"
+  },
+  "deepResearchSaveReportTooltip": {
+    "message": "Export this research report",
+    "description": "Deep Research save report tooltip"
+  },
+  "export_fontsize_label": {
+    "message": "Размер шрифта",
+    "description": "Label for font size slider in export dialog"
+  },
+  "export_fontsize_preview": {
+    "message": "Съешь ещё этих мягких французских булок, да выпей чаю.",
+    "description": "Preview text for font size slider in export dialog"
+  },
+  "export_error_generic": {
+    "message": "Не удалось экспортировать: {error}",
+    "description": "Общее сообщение об ошибке экспорта с подробной причиной"
+  },
+  "export_error_refresh_retry": {
+    "message": "Экспорт изображения не удался из-за проблем с сетью. Обновите страницу и попробуйте снова.",
+    "description": "Подсказка при временной ошибке загрузки во время экспорта изображения"
+  },
+  "export_md_include_source_confirm": {
+    "message": "Экспортируемый контент содержит изображения из веб-поиска. Включить ссылки на источники изображений в Markdown?",
+    "description": "Confirm dialog when exporting markdown with web search images"
+  },
+  "deepResearch_exportedAt": {
+    "message": "Экспортировано",
+    "description": "Метка временной метки экспорта Deep Research"
+  },
+  "deepResearch_totalPhases": {
+    "message": "Всего фаз",
+    "description": "Метка общего количества фаз размышления Deep Research"
+  },
+  "deepResearch_thinkingPhase": {
+    "message": "Фаза размышления",
+    "description": "Заголовок фазы размышления Deep Research"
+  },
+  "deepResearch_researchedWebsites": {
+    "message": "Исследованные сайты",
+    "description": "Заголовок раздела исследованных сайтов Deep Research"
+  },
+  "snowEffect": {
+    "message": "Эффект снега",
+    "description": "Snow effect toggle label"
+  },
+  "snowEffectHint": {
+    "message": "Снегопад на странице для зимней атмосферы",
+    "description": "Snow effect feature hint"
   }
 }

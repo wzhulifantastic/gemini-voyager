@@ -1,3 +1,7 @@
+import browser from 'webextension-polyfill';
+
+import { StorageKeys } from '@/core/types/common';
+
 import { getTranslationSync } from '../../../utils/i18n';
 
 const STYLE_ID = 'gemini-voyager-input-collapse';
@@ -330,7 +334,6 @@ function initInputCollapse() {
 
   injectStyles();
 
-  let isFocused = false;
   let lastPathname = window.location.pathname;
 
   // Create AbortController for managing all event listeners
@@ -399,7 +402,6 @@ function initInputCollapse() {
       container.addEventListener(
         'focusin',
         () => {
-          isFocused = true;
           expand(container);
         },
         { signal },
@@ -413,7 +415,6 @@ function initInputCollapse() {
             return; // Focus is still inside
           }
 
-          isFocused = false;
           tryCollapse(container);
         },
         { signal },
@@ -427,6 +428,19 @@ function initInputCollapse() {
   });
 
   observer.observe(document.body, { childList: true, subtree: true });
+
+  // Listen for language changes and update placeholder text
+  browser.storage.onChanged.addListener((changes, areaName) => {
+    if ((areaName === 'sync' || areaName === 'local') && changes[StorageKeys.LANGUAGE]) {
+      // Update all placeholder text
+      document.querySelectorAll<HTMLDivElement>(`.${PLACEHOLDER_CLASS}`).forEach((placeholder) => {
+        const span = placeholder.querySelector('span');
+        if (span) {
+          span.textContent = getTranslationSync('inputCollapsePlaceholder') || 'Message Gemini';
+        }
+      });
+    }
+  });
 
   // Try once immediately
   const container = getInputContainer();

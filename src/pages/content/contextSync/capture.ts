@@ -1,6 +1,8 @@
 import { getMatchedAdapter } from '@/features/contextSync/adapters';
 import { DialogNode } from '@/features/contextSync/types';
 
+import { getBrowserName } from '../../../core/utils/browser';
+
 export class ContextCaptureService {
   private static instance: ContextCaptureService;
 
@@ -13,62 +15,21 @@ export class ContextCaptureService {
     return this.instance;
   }
 
-  captureDialogue(): DialogNode[] {
+  async captureDialogue(): Promise<DialogNode[]> {
     const host = window.location.hostname;
     const adapter = getMatchedAdapter(host);
     const messages: DialogNode[] = [];
-
-    // Helper to get nodes
-    const getNodes = (sel: string | undefined): HTMLElement[] => {
-      if (!sel) return [];
-      return Array.from(document.querySelectorAll(sel));
-    };
 
     let queries: HTMLElement[] = [];
     let responses: HTMLElement[] = [];
 
     if (adapter.user_selector && adapter.ai_selector) {
-      // Specific selectors (Gemini style)
-      // adapter.user_selector is string[] in types but usage implies it might be used as selector string in querySelectorAll
-      // Let's fix types or usage. In content.js it was: user_selector: ['.query-content']
-      // and getNodes(adapter.user_selector) passed the array to querySelectorAll? No, querySelectorAll takes string.
-      // The original code: getNodes(adapter.user_selector) -> Array.from(document.querySelectorAll(sel))
-      // If sel is array, querySelectorAll(array) is invalid.
-      // Wait, original content.js:
-      // 'gemini.google.com': { user_selector: ['.query-content'], ... }
-      // const getNodes = (sel) => Array.from(document.querySelectorAll(sel));
-      // querySelectorAll(['.a']) works? No. It converts to string ".a".
-      // So effectively it works for single selector.
-      // I'll handle array properly by joining with comma.
-
       queries = adapter.user_selector
         ? (Array.from(document.querySelectorAll(adapter.user_selector.join(','))) as HTMLElement[])
         : [];
       responses = adapter.ai_selector
         ? (Array.from(document.querySelectorAll(adapter.ai_selector.join(','))) as HTMLElement[])
         : [];
-    } else if (adapter.selectors) {
-      // General selectors (ChatGPT style)
-      // This part requires more complex logic from original script?
-      // Original script for ChatGPT:
-      // selectors: ['[data-testid^="conversation-turn-"]']
-      // It seems the original script had a branch logic that I missed or it was implicit.
-      // Looking at original content.js:
-      // It only used `getNodes(adapter.user_selector)` and `getNodes(adapter.ai_selector)`.
-      // But ChatGPT adapter in original code didn't have user_selector/ai_selector!
-      // It had `selectors`, `aiMarkers`, `userMarkers`.
-      // AND... the original code `captureDialogue` ONLY used `adapter.user_selector` and `adapter.ai_selector`.
-      // So the ChatGPT part in original code was BROKEN or I missed something.
-      // Let's re-read content.js line 71-72:
-      // const queries = getNodes(adapter.user_selector);
-      // const responses = getNodes(adapter.ai_selector);
-      // If adapter is ChatGPT, these are undefined. getNodes(undefined) -> querySelectorAll(undefined) -> Error or empty?
-      // querySelectorAll(undefined) throws error "is not a valid selector".
-      // So the user's script for ChatGPT was likely broken or incomplete in the provided snippet.
-      // However, I must fix it.
-      // For Gemini, it works. For ChatGPT, I should probably implement the logic to distinguish user/ai based on markers if I want to support it.
-      // But for now, let's focus on Gemini as this is "Gemini Voyager".
-      // I will keep the structure but ensure it doesn't crash.
     }
 
     console.log(`[ContextSync] Found ${queries.length} queries and ${responses.length} responses.`);
@@ -77,16 +38,132 @@ export class ContextCaptureService {
 
     for (let i = 0; i < maxLength; i++) {
       if (i < queries.length) {
-        const info = this.extractNodeInfo(queries[i], 'user');
+        const info = await this.extractNodeInfo(queries[i], 'user');
         if (info) messages.push(info);
       }
       if (i < responses.length) {
-        const info = this.extractNodeInfo(responses[i], 'assistant');
+        const info = await this.extractNodeInfo(responses[i], 'assistant');
         if (info) messages.push(info);
       }
     }
 
     return messages;
+  }
+
+  private static async getBase64Safe(url: string): Promise<string | null> {
+    if (!url || url === 'about:blank') return null;
+
+    // If it's a blob URL, it's already a high-res/processed image in the page context
+    if (url.startsWith('blob:')) {
+      try {
+        const resp = await fetch(url);
+        const blob = await resp.blob();
+        return new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result as string);
+          reader.onerror = () => {
+            console.error('[ContextSync] FileReader error for blob');
+            resolve(null);
+          };
+          reader.readAsDataURL(blob);
+        });
+      } catch (e) {
+        console.error('[ContextSync] Failed to fetch blob URL:', e);
+        return null;
+      }
+    }
+
+    // Determine the "best" URL to fetch.
+    // For Google images, try to request the original size (=s0).
+    let targetUrl = url;
+    const isGoogleImage = url.includes('googleusercontent.com') || url.includes('ggpht.com');
+
+    if (isGoogleImage) {
+      // 1. Convert rd-gg to rd-gg-dl for better access to original resolution.
+      // NOTE: We only do this for Chrome-based browsers.
+      // Firefox handles rd-gg-dl poorly (NetworkError/CORS), so it stays on rd-gg.
+      const isFirefox = getBrowserName().includes('Firefox');
+      if (!isFirefox && targetUrl.includes('/rd-gg/')) {
+        targetUrl = targetUrl.replace('/rd-gg/', '/rd-gg-dl/');
+      }
+
+      // 2. Request original size (=s0).
+      // This is a known Google image parameter for full resolution.
+      if (targetUrl.match(/=[swh]\d+/)) {
+        targetUrl = targetUrl.replace(/=[swh]\d+[^?#]*/, '=s0');
+      } else if (!targetUrl.includes('=s0')) {
+        // If no sizing parameter found, append =s0
+        // We use =s0 which is generally safer for these types of URLs
+        if (targetUrl.includes('=')) {
+          // If there's already some other parameter, append another one?
+          // Usually Google params are =sNN-pp-kk. If it doesn't match [swh]\d, we just append.
+          targetUrl += '-s0';
+        } else {
+          targetUrl += '=s0';
+        }
+      }
+    }
+
+    // Helper for fetch with potential credentials fallback
+    const fetchToBlob = async (fetchUrl: string): Promise<Blob | null> => {
+      try {
+        const resp = await fetch(fetchUrl, {
+          credentials: 'include',
+          mode: 'cors' as RequestMode,
+        });
+        if (resp.ok) return await resp.blob();
+      } catch {
+        /* ignore credentials error */
+      }
+
+      try {
+        const resp = await fetch(fetchUrl, {
+          credentials: 'omit',
+          mode: 'cors' as RequestMode,
+        });
+        if (resp.ok) return await resp.blob();
+      } catch (e) {
+        console.error('[ContextSync] Image fetch failed (all content-script attempts):', e);
+      }
+      return null;
+    };
+
+    // Strategy 1: Attempt direct fetch from content script
+    try {
+      const blob = await fetchToBlob(targetUrl);
+      if (blob) {
+        return new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result as string);
+          reader.onerror = () => resolve(null);
+          reader.readAsDataURL(blob);
+        });
+      }
+    } catch (e) {
+      console.warn('[ContextSync] Strategy 1 (Direct) exception:', e);
+    }
+
+    // Strategy 2: Background fetch
+    return new Promise((resolve) => {
+      chrome.runtime.sendMessage({ type: 'gv.fetchImage', url: targetUrl }, (response) => {
+        if (response && response.ok) {
+          resolve(response.data);
+        } else {
+          // Strategy 3: Fetch via page context
+          chrome.runtime.sendMessage(
+            { type: 'gv.fetchImageViaPage', url: targetUrl },
+            (pageResponse) => {
+              if (pageResponse && pageResponse.ok) {
+                resolve(pageResponse.data);
+              } else {
+                console.error('[ContextSync] Image fetch failed (all methods):', targetUrl);
+                resolve(null);
+              }
+            },
+          );
+        }
+      });
+    });
   }
 
   private convertTableToMarkdown(table: HTMLTableElement): string {
@@ -125,24 +202,59 @@ export class ContextCaptureService {
     }
   }
 
-  private extractNodeInfo(
+  private async extractNodeInfo(
     el: HTMLElement,
     forceRole: 'user' | 'assistant' | null = null,
-  ): DialogNode | null {
+  ): Promise<DialogNode | null> {
     if (el.offsetParent === null) return null;
     if (['SCRIPT', 'STYLE', 'NAV', 'HEADER', 'FOOTER', 'SVG', 'PATH'].includes(el.tagName))
       return null;
 
     const clone = el.cloneNode(true) as HTMLElement;
 
+    // 处理表格
     const tables = Array.from(clone.querySelectorAll('table')).reverse();
     tables.forEach((table) => {
       const md = this.convertTableToMarkdown(table as HTMLTableElement);
       table.replaceWith(document.createTextNode(md));
     });
 
+    // 处理图片：复用导出功能的全面选择器逻辑
+    const imgBase64List: string[] = [];
+    const imageSelectors = [
+      'user-query-file-preview img',
+      '.preview-image',
+      'generated-image img',
+      'single-image img',
+      '.attachment-container.generated-images img',
+    ].join(',');
+
+    const imgElements = Array.from(clone.querySelectorAll(imageSelectors)) as HTMLImageElement[];
+    if (imgElements.length > 0) {
+      console.log(`[ContextSync] Found ${imgElements.length} image(s)`);
+      for (const imgEl of imgElements) {
+        // Use attribute if available, otherwise fallback to property
+        let src = imgEl.getAttribute('src') || imgEl.src || '';
+        if (!src || src === 'about:blank') continue;
+
+        // Resolve relative URLs to absolute
+        if (src.startsWith('/')) {
+          src = window.location.origin + src;
+        }
+
+        const base64 = await ContextCaptureService.getBase64Safe(src);
+        if (base64) {
+          imgBase64List.push(base64);
+          console.log('[ContextSync] Converted image to Base64 (length):', base64.length);
+        }
+      }
+      console.log(
+        `[ContextSync] Successfully converted ${imgBase64List.length} image(s) to Base64`,
+      );
+    }
+
     let text = clone.innerText.trim();
-    if (text.length < 1) return null;
+    if (text.length < 1 && imgBase64List.length === 0) return null;
 
     text = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
     text = text.replace(/___BR___/g, '<br>');
@@ -151,6 +263,7 @@ export class ContextCaptureService {
       url: window.location.hostname,
       className: el.className,
       text: text,
+      images: imgBase64List,
       is_ai_likely: forceRole === 'assistant',
       is_user_likely: forceRole === 'user',
       rect: {

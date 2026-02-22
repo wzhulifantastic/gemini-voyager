@@ -228,7 +228,7 @@
     "description": "Official docs link"
   },
   "exportChatJson": {
-    "message": "匯出聊天紀錄",
+    "message": "匯出對話記錄",
     "description": "匯出按鈕提示"
   },
   "folder_title": {
@@ -347,9 +347,25 @@
     "message": "LaTeX (純文字，無 $ 符號)",
     "description": "LaTeX 格式選項，無美元符號"
   },
+  "folder_filter_current_user": {
+    "message": "帳號隔離模式",
+    "description": "Show only conversations from the current Google account"
+  },
   "folder_export": {
     "message": "匯出資料夾",
     "description": "匯出資料夾按鈕提示"
+  },
+  "folder_import_export": {
+    "message": "匯入/匯出資料夾",
+    "description": "合併的匯入匯出按鈕提示"
+  },
+  "folder_cloud_upload": {
+    "message": "上傳到雲端",
+    "description": "雲端上傳按鈕提示"
+  },
+  "folder_cloud_sync": {
+    "message": "從雲端同步",
+    "description": "雲端同步按鈕提示"
   },
   "folder_import": {
     "message": "匯入資料夾",
@@ -408,8 +424,32 @@
     "description": "匯出格式選擇標籤"
   },
   "export_dialog_warning": {
-    "message": "⚠️ 由於 Gemini 的久遠訊息會延遲載入，請在匯出前透過時間軸跳轉到該對話的第一則訊息，否則匯出內容可能不完整。",
-    "description": "關於延遲載入影響匯出完整性的警告"
+    "message": "⚠️ 點擊匯出後，系統將自動跳轉至首則訊息以載入完整內容。在此期間請勿操作，跳轉完成後將自動繼續匯出。",
+    "description": "關於內容完整性和自動跳轉的提示"
+  },
+  "export_dialog_safari_cmdp_hint": {
+    "message": "Safari 提示：請先點選下方「匯出」按鈕，稍等片刻，再按 ⌘P 選擇「儲存為 PDF」。",
+    "description": "Safari 下 PDF 匯出的提示"
+  },
+  "export_toast_safari_pdf_ready": {
+    "message": "現在可以按 Command + P 匯出 PDF。",
+    "description": "Safari 中完成匯出準備後的提示"
+  },
+  "export_dialog_safari_markdown_hint": {
+    "message": "提醒：由於Safari限制，無法提取聊天記錄中的圖片，如需完整匯出，建議使用PDF匯出",
+    "description": "關於 Safari Markdown 匯出無法提取圖片的警告"
+  },
+  "export_format_json_description": {
+    "message": "開發者使用的機器可讀格式",
+    "description": "JSON 匯出格式描述"
+  },
+  "export_format_markdown_description": {
+    "message": "清晰便攜的文字格式（推薦）",
+    "description": "Markdown 匯出格式描述"
+  },
+  "export_format_pdf_description": {
+    "message": "適合列印的格式（透過另存為 PDF）",
+    "description": "PDF 匯出格式描述"
   },
   "editInputWidth": {
     "message": "編輯輸入框寬度",
@@ -711,6 +751,14 @@
     "message": "Cmd/Win",
     "description": "Meta/Command/Windows 修飾鍵"
   },
+  "preventAutoScroll": {
+    "message": "防自動跳轉",
+    "description": "Auto-hide sidebar toggle label"
+  },
+  "preventAutoScrollHint": {
+    "message": "避免在查看過往紀錄時按 Enter 導致頁面強制滾動到底部",
+    "description": "Auto-hide sidebar feature hint"
+  },
   "cloudSync": {
     "message": "雲端同步",
     "description": "雲端同步區域標題"
@@ -762,6 +810,22 @@
   "syncInProgress": {
     "message": "同步中...",
     "description": "同步進行中訊息"
+  },
+  "uploadInProgress": {
+    "message": "上傳中...",
+    "description": "上傳進行中訊息"
+  },
+  "uploadSuccess": {
+    "message": "✓ 上傳成功",
+    "description": "上傳成功訊息"
+  },
+  "downloadInProgress": {
+    "message": "下載中...",
+    "description": "下載進行中訊息"
+  },
+  "downloadMergeSuccess": {
+    "message": "✓ 下載合併成功",
+    "description": "下載合併成功訊息"
   },
   "syncUpload": {
     "message": "上傳到雲端",
@@ -855,13 +919,25 @@
     "message": "展開",
     "description": "展開子節點"
   },
+  "timelinePreviewSearch": {
+    "message": "搜尋...",
+    "description": "Timeline preview panel search placeholder"
+  },
+  "timelinePreviewNoResults": {
+    "message": "無結果",
+    "description": "Timeline preview panel no search results"
+  },
+  "timelinePreviewNoMessages": {
+    "message": "暫無訊息",
+    "description": "Timeline preview panel no messages"
+  },
   "quoteReply": {
     "message": "引用回覆",
     "description": "引用回覆按鈕文字"
   },
   "inputCollapseOptions": {
-    "message": "輸入框摺疊",
-    "description": "輸入框摺疊選項區域標籤"
+    "message": "輸入選項",
+    "description": "輸入選項區域標籤"
   },
   "enableInputCollapse": {
     "message": "啟用輸入框摺疊",
@@ -874,6 +950,14 @@
   "inputCollapsePlaceholder": {
     "message": "傳送訊息給 Gemini",
     "description": "摺疊輸入框時顯示的佔位符文字"
+  },
+  "ctrlEnterSend": {
+    "message": "Ctrl+Enter 傳送",
+    "description": "Ctrl+Enter 傳送開關標籤"
+  },
+  "ctrlEnterSendHint": {
+    "message": "按 Ctrl+Enter 傳送訊息，Enter 鍵僅換行",
+    "description": "Ctrl+Enter 傳送功能提示"
   },
   "batch_delete_confirm": {
     "message": "確定要刪除 {count} 個對話嗎？此操作無法復原。",
@@ -1001,7 +1085,11 @@
   },
   "folder_color_pink": {
     "message": "粉紅色",
-    "description": "Pink folder color"
+    "description": "粉紅色資料夾顏色名稱"
+  },
+  "folder_color_custom": {
+    "message": "自定義",
+    "description": "自定義資料夾顏色名稱"
   },
   "downloadingOriginal": {
     "message": "正在下載原始圖片",
@@ -1026,5 +1114,149 @@
   "downloadError": {
     "message": "失敗",
     "description": "下載失敗時的狀態前置"
+  },
+  "recentsHide": {
+    "message": "隱藏最近項目",
+    "description": "隱藏最近預覽區域的提示"
+  },
+  "recentsShow": {
+    "message": "顯示最近項目",
+    "description": "顯示最近預覽區域的提示"
+  },
+  "gemsHide": {
+    "message": "隱藏 Gems",
+    "description": "隱藏 Gems 列表區域的提示"
+  },
+  "gemsShow": {
+    "message": "顯示 Gems",
+    "description": "顯示 Gems 列表區域的提示"
+  },
+  "setAsDefaultModel": {
+    "message": "設為新對話的預設模型",
+    "description": "Tooltip for setting default model"
+  },
+  "cancelDefaultModel": {
+    "message": "取消預設模型",
+    "description": "Tooltip for cancelling default model"
+  },
+  "defaultModelSet": {
+    "message": "已設定預設模型：$1",
+    "description": "Toast message when default model is set"
+  },
+  "defaultModelCleared": {
+    "message": "已取消預設模型",
+    "description": "Toast message when default model is cleared"
+  },
+  "sidebarAutoHide": {
+    "message": "側邊欄自動收起",
+    "description": "側邊欄自動收起開關標籤"
+  },
+  "sidebarAutoHideHint": {
+    "message": "滑鼠離開時自動收起側邊欄，滑鼠進入時展開",
+    "description": "側邊欄自動收起功能提示"
+  },
+  "folderSpacing": {
+    "message": "資料夾間距",
+    "description": "資料夾間距調節標籤"
+  },
+  "folderSpacingCompact": {
+    "message": "緊湊",
+    "description": "緊湊資料夾間距標籤"
+  },
+  "folderSpacingSpacious": {
+    "message": "寬鬆",
+    "description": "寬鬆資料夾間距標籤"
+  },
+  "folderTreeIndent": {
+    "message": "子資料夾縮排",
+    "description": "子資料夾樹狀縮排調整標籤"
+  },
+  "folderTreeIndentCompact": {
+    "message": "更窄",
+    "description": "較窄的子資料夾縮排標籤"
+  },
+  "folderTreeIndentSpacious": {
+    "message": "更寬",
+    "description": "較寬的子資料夾縮排標籤"
+  },
+  "export_select_mode_select_all": {
+    "message": "全選",
+    "description": "Selection mode select all toggle"
+  },
+  "export_select_mode_count": {
+    "message": "已選擇 {count} 條",
+    "description": "Selection mode selected message count"
+  },
+  "export_select_mode_toggle": {
+    "message": "選擇訊息",
+    "description": "Selection mode per-message toggle tooltip"
+  },
+  "export_select_mode_select_below": {
+    "message": "選擇下方訊息",
+    "description": "Selection mode top-left button to select messages below current line"
+  },
+  "export_select_mode_empty": {
+    "message": "請至少選擇一條訊息進行匯出",
+    "description": "Selection mode validation when nothing is selected"
+  },
+  "export_format_image_description": {
+    "message": "單張PNG圖片，便於行動端分享。",
+    "description": "Description for Image export format"
+  },
+  "export_image_progress": {
+    "message": "正在產生圖片...",
+    "description": "Progress message while generating image export"
+  },
+  "deepResearchSaveReport": {
+    "message": "儲存報告",
+    "description": "Deep Research save report button"
+  },
+  "deepResearchSaveReportTooltip": {
+    "message": "匯出此研究報告",
+    "description": "Deep Research save report tooltip"
+  },
+  "export_fontsize_label": {
+    "message": "字體大小",
+    "description": "Label for font size slider in export dialog"
+  },
+  "export_fontsize_preview": {
+    "message": "天地玄黃，宇宙洪荒。日月盈昃，辰宿列張。",
+    "description": "Preview text for font size slider in export dialog"
+  },
+  "export_error_generic": {
+    "message": "匯出失敗：{error}",
+    "description": "附帶具體原因的匯出失敗提示"
+  },
+  "export_error_refresh_retry": {
+    "message": "因網路原因，圖片匯出失敗，請重新整理頁面後重試。",
+    "description": "圖片匯出遇到暫時性載入失敗時的重新整理提示"
+  },
+  "export_md_include_source_confirm": {
+    "message": "匯出內容包含網路搜尋圖片。是否在 Markdown 中包含圖片來源連結？",
+    "description": "Confirm dialog when exporting markdown with web search images"
+  },
+  "deepResearch_exportedAt": {
+    "message": "匯出時間",
+    "description": "深度研究匯出時間戳標籤"
+  },
+  "deepResearch_totalPhases": {
+    "message": "總思考階段",
+    "description": "深度研究總思考階段標籤"
+  },
+  "deepResearch_thinkingPhase": {
+    "message": "思考階段",
+    "description": "深度研究思考階段標題"
+  },
+  "deepResearch_researchedWebsites": {
+    "message": "研究網站",
+    "description": "深度研究已研究網站章節標題"
+  },
+  "snowEffect": {
+    "message": "飄雪效果",
+    "description": "Snow effect toggle label"
+  },
+  "snowEffectHint": {
+    "message": "在頁面上飄雪，營造冬日氛圍",
+    "description": "Snow effect feature hint"
   }
 }

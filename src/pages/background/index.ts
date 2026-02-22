@@ -4,7 +4,7 @@ import browser from 'webextension-polyfill';
 import { googleDriveSyncService } from '@/core/services/GoogleDriveSyncService';
 import { StorageKeys } from '@/core/types/common';
 import type { FolderData } from '@/core/types/folder';
-import type { PromptItem, SyncData, SyncMode } from '@/core/types/sync';
+import type { PromptItem, SyncMode } from '@/core/types/sync';
 import type { StarredMessage, StarredMessagesData } from '@/pages/content/timeline/starredTypes';
 
 const CUSTOM_CONTENT_SCRIPT_ID = 'gv-custom-content-script';
@@ -223,7 +223,7 @@ chrome.permissions.onRemoved.addListener(() => {
  * All read-modify-write operations are serialized through this background script.
  */
 class StarredMessagesManager {
-  private operationQueue: Promise<any> = Promise.resolve();
+  private operationQueue: Promise<unknown> = Promise.resolve();
 
   /**
    * Serialize all operations to prevent race conditions
@@ -260,7 +260,17 @@ class StarredMessagesManager {
       const exists = data.messages[message.conversationId].some((m) => m.turnId === message.turnId);
 
       if (!exists) {
-        data.messages[message.conversationId].push(message);
+        // Truncate content to save storage space
+        // Popup is ~360px wide with line-clamp-2, showing ~50-60 chars max
+        const MAX_CONTENT_LENGTH = 60;
+        const truncatedMessage: StarredMessage = {
+          ...message,
+          content:
+            message.content.length > MAX_CONTENT_LENGTH
+              ? message.content.slice(0, MAX_CONTENT_LENGTH) + '...'
+              : message.content,
+        };
+        data.messages[message.conversationId].push(truncatedMessage);
         await this.saveToStorage(data);
         return true;
       }
@@ -309,7 +319,7 @@ class StarredMessagesManager {
 
 const starredMessagesManager = new StarredMessagesManager();
 
-chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   (async () => {
     try {
       // Handle starred messages operations
@@ -366,26 +376,35 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
             return;
           }
           case 'gv.sync.upload': {
-            const { folders, prompts, interactive } = message.payload as {
+            const { folders, prompts, interactive, platform } = message.payload as {
               folders: FolderData;
               prompts: PromptItem[];
               interactive?: boolean;
+              platform?: 'gemini' | 'aistudio';
             };
+            // Also get starred messages from local storage (only for Gemini platform)
+            const starredData =
+              platform !== 'aistudio' ? await starredMessagesManager.getAllStarredMessages() : null;
             const success = await googleDriveSyncService.upload(
               folders,
               prompts,
+              starredData,
               interactive !== false,
+              platform || 'gemini',
             );
             sendResponse({ ok: success, state: await googleDriveSyncService.getState() });
             return;
           }
           case 'gv.sync.download': {
             const interactive = message.payload?.interactive !== false;
-            const data = await googleDriveSyncService.download(interactive);
+            const platform = (message.payload?.platform as 'gemini' | 'aistudio') || 'gemini';
+            const data = await googleDriveSyncService.download(interactive, platform);
             // NOTE: We intentionally do NOT save to storage here.
             // The caller (Popup) is responsible for merging with local data and saving.
             // This prevents data loss from overwriting local changes.
-            console.log('[Background] Downloaded data, returning to caller for merge');
+            console.log(
+              `[Background] Downloaded data for ${platform}, returning to caller for merge`,
+            );
             sendResponse({
               ok: true,
               data,
@@ -413,10 +432,141 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
         try {
           await chrome.action.openPopup();
           sendResponse({ ok: true });
-        } catch (e: any) {
+        } catch (e) {
           // Fallback: If openPopup fails, user can click the extension icon
           console.warn('[GV] Failed to open popup programmatically:', e);
-          sendResponse({ ok: false, error: String(e?.message || e) });
+          sendResponse({ ok: false, error: e instanceof Error ? e.message : String(e) });
+        }
+        return;
+      }
+
+      // Handle sync to IDE (bypasses page CSP)
+      if (message?.type === 'gv.syncToIDE') {
+        const url = String(message.url || '');
+        const data = message.data || [];
+        try {
+          const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            mode: 'cors',
+            body: JSON.stringify(data),
+          });
+
+          if (!response.ok) {
+            sendResponse({ ok: false, error: `HTTP ${response.status}` });
+          } else {
+            const result = await response.json();
+            sendResponse({ ok: true, data: result });
+          }
+        } catch (e) {
+          sendResponse({ ok: false, error: e instanceof Error ? e.message : String(e) });
+        }
+        return;
+      }
+
+      // Handle check sync server status (bypasses page CSP)
+      if (message?.type === 'gv.checkSyncStatus') {
+        const url = String(message.url || '');
+        const timeout = Number(message.timeout || 200);
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+        try {
+          const response = await fetch(url, {
+            method: 'GET',
+            signal: controller.signal,
+          });
+          sendResponse({ ok: response.ok });
+        } catch {
+          sendResponse({ ok: false });
+        } finally {
+          clearTimeout(timeoutId);
+        }
+        return;
+      }
+
+      // Handle image fetch via page context (for Firefox/Safari cookie partitioning)
+      // Uses chrome.scripting.executeScript in MAIN world so the page's own fetch is used,
+      // which has access to the correct Google authentication cookies.
+      if (message?.type === 'gv.fetchImageViaPage') {
+        const url = String(message.url || '');
+        const tabId = sender?.tab?.id;
+        if (!tabId || !/^https?:\/\//i.test(url)) {
+          sendResponse({ ok: false, error: 'invalid' });
+          return;
+        }
+        if (!chrome.scripting?.executeScript) {
+          sendResponse({ ok: false, error: 'scripting_api_unavailable' });
+          return;
+        }
+        try {
+          const results = await chrome.scripting.executeScript({
+            target: { tabId },
+            world: 'MAIN' as chrome.scripting.ExecutionWorld,
+            func: async (imageUrl: string) => {
+              const safeFetch = async (credentials: RequestCredentials) => {
+                try {
+                  console.log(`[PageContext] Fetching with ${credentials}:`, imageUrl);
+                  const resp = await fetch(imageUrl, { credentials });
+                  if (resp.ok) return await resp.blob();
+                  console.warn(`[PageContext] Fetch (${credentials}) HTTP error:`, resp.status);
+                } catch (e) {
+                  console.warn(`[PageContext] Fetch (${credentials}) error:`, e);
+                }
+                return null;
+              };
+
+              try {
+                // Try with credentials first, then without (fix for Firefox CSP/CORS)
+                const blob = (await safeFetch('include')) || (await safeFetch('omit'));
+                if (!blob) {
+                  console.error('[PageContext] All fetch attempts failed');
+                  return null;
+                }
+
+                return new Promise<{
+                  contentType: string;
+                  base64: string;
+                } | null>((resolve) => {
+                  const reader = new FileReader();
+                  reader.onload = () => {
+                    const dataUrl = String(reader.result || '');
+                    const commaIdx = dataUrl.indexOf(',');
+                    if (commaIdx < 0) {
+                      resolve(null);
+                      return;
+                    }
+                    resolve({
+                      contentType: blob.type || 'application/octet-stream',
+                      base64: dataUrl.substring(commaIdx + 1),
+                    });
+                  };
+                  reader.onerror = () => resolve(null);
+                  reader.readAsDataURL(blob);
+                });
+              } catch {
+                return null;
+              }
+            },
+            args: [url],
+          });
+          const result = results?.[0]?.result as {
+            contentType: string;
+            base64: string;
+          } | null;
+          if (result?.base64) {
+            sendResponse({
+              ok: true,
+              contentType: result.contentType,
+              base64: result.base64,
+              data: `data:${result.contentType};base64,${result.base64}`,
+            });
+          } else {
+            sendResponse({ ok: false, error: 'page_fetch_failed' });
+          }
+        } catch (e: unknown) {
+          const errMsg = e instanceof Error ? e.message : String(e);
+          sendResponse({ ok: false, error: errMsg });
         }
         return;
       }
@@ -428,19 +578,49 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
         sendResponse({ ok: false, error: 'invalid_url' });
         return;
       }
-      const resp = await fetch(url, { credentials: 'include', mode: 'cors' as RequestMode });
-      if (!resp.ok) {
-        sendResponse({ ok: false, status: resp.status });
-        return;
-      }
-      const contentType = resp.headers.get('Content-Type') || '';
-      const ab = await resp.arrayBuffer();
-      // Convert to base64
-      const b64 = arrayBufferToBase64(ab);
-      sendResponse({ ok: true, contentType, base64: b64 });
-    } catch (e: any) {
+
+      const fetchWithFallback = async (fetchUrl: string) => {
+        try {
+          const r1 = await fetch(fetchUrl, { credentials: 'include', redirect: 'follow' });
+          if (r1.ok) return r1;
+        } catch {
+          /* ignore include error */
+        }
+
+        try {
+          const r2 = await fetch(fetchUrl, { credentials: 'omit', redirect: 'follow' });
+          return r2;
+        } catch (e) {
+          throw e;
+        }
+      };
+
+      fetchWithFallback(url)
+        .then((response) => {
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          return response.blob();
+        })
+        .then((blob) => {
+          return blob.arrayBuffer().then((ab) => {
+            const b64 = arrayBufferToBase64(ab);
+            const contentType = blob.type || 'image/png';
+            const dataUrl = `data:${contentType};base64,${b64}`;
+            sendResponse({
+              ok: true,
+              data: dataUrl,
+              contentType,
+              base64: b64,
+            });
+          });
+        })
+        .catch((err) => {
+          console.error('[Background] gv.fetchImage Final failure:', err);
+          sendResponse({ ok: false, error: err.message });
+        });
+      return;
+    } catch (e) {
       try {
-        sendResponse({ ok: false, error: String(e?.message || e) });
+        sendResponse({ ok: false, error: e instanceof Error ? e.message : String(e) });
       } catch {}
     }
   })();

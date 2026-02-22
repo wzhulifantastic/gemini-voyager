@@ -1,27 +1,50 @@
-# Your Intellectual Assets
+# أصلك الرقمي: مكتبة المطالبات
 
-You craft a perfect prompt. It solves a complex coding problem or writes a beautiful email.
-Do you throw it away?
-No. You save it.
+قضيت وقتاً طويلاً في كتابة مطالبة (Prompt) مذهلة ساعدت كثيراً.
+تستخدمها وترميها؟
+لا، احفظها.
 
-## The Prompt Vault
+## خزنة الأوامر
 
-This is your personal repository of genius.
+هذه هي خزنة الأوامر الخاصة بك.
 
-### 1. Capture
+### 1. التقاط
 
-When you write something great, click the **Prompt Manager** icon (floating near the input box).
-It’s now part of your vault.
+هل كتبت شيئاً جيداً؟ انقر فوق **الأيقونة العائمة** بجوار مربع الإدخال.
+احفظها في الخزنة، لتشعر بالأمان.
 
-### 2. Categorize
+### 2. تصنيف
 
-Add tags like `#coding`, `#email`, or `#research`.
-Keep your tools sharpened and sorted.
+أضف وسوماً مثل `#كود`، `#بريد_إلكتروني`، `#أكاديمي`.
+يجب أن تكون الأدوات مفيدة ومنظمة أيضاً.
 
-### 3. Deploy
+### 3. نشر
 
-Next time you need it, don't type it again.
-Open the manager, search by tag or keyword, and click to insert.
-One click. Infinite leverage.
+في المرة القادمة التي تحتاج إليها، لا تعيد كتابة كل شيء.
+افتح المكتبة، ابحث عن طريق الوسم، انقر للإدراج.
+استدعاء بنقرة واحدة، ضاعف الكفاءة.
 
-![Prompt Manager](/assets/gemini-prompt-manager.png)
+![مدير المطالبات](/assets/gemini-prompt-manager.png)
+
+## يعمل على أي موقع
+
+يمكن الآن استخدام مدير المطالبات على أي موقع تختاره، ولا يقتصر على Gemini و AI Studio.
+
+### كيفية التفعيل
+
+1. انقر فوق أيقونة Voyager في شريط أدوات إضافات المتصفح.
+2. مرر لأسفل إلى قسم **مدير المطالبات**.
+3. أدخل عنوان URL للموقع (مثل: `chatgpt.com` أو `claude.ai`).
+4. انقر فوق **إضافة موقع** وامنح الإذن.
+5. **قم بتحديث الصفحة المستهدفة**، وسترى الكرة العائمة.
+
+### أمثلة لمواقع AI الشائعة
+
+- `chatgpt.com` - ChatGPT
+- `claude.ai` - Claude
+- `copilot.microsoft.com` - Microsoft Copilot
+- `poe.com` - Poe
+
+::: tip
+في المواقع المخصصة، يتم تفعيل ميزة مدير المطالبات **فقط**. الميزات الأخرى مثل الجدول الزمني والمجلدات وما إلى ذلك مخصصة لـ Gemini ولن يتم تحميلها.
+:::

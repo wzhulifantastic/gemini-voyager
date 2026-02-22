@@ -1,13 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import type { SyncMode, SyncState } from '@/core/types/sync';
+import type { FolderData } from '@/core/types/folder';
+import type { PromptItem, SyncMode, SyncPlatform, SyncState } from '@/core/types/sync';
 import { DEFAULT_SYNC_STATE } from '@/core/types/sync';
+import { isSafari } from '@/core/utils/browser';
 
 import { Button } from '../../../components/ui/button';
 import { Card, CardContent, CardTitle } from '../../../components/ui/card';
 import { Label } from '../../../components/ui/label';
 import { useLanguage } from '../../../contexts/LanguageContext';
-import { mergeFolderData, mergePrompts } from '../../../utils/merge';
+import { mergeFolderData, mergePrompts, mergeStarredMessages } from '../../../utils/merge';
 
 /**
  * CloudSyncSettings component for popup
@@ -15,14 +17,30 @@ import { mergeFolderData, mergePrompts } from '../../../utils/merge';
  */
 export function CloudSyncSettings() {
   const { t } = useLanguage();
+  const isSafariBrowser = isSafari();
+
   const [syncState, setSyncState] = useState<SyncState>(DEFAULT_SYNC_STATE);
   const [statusMessage, setStatusMessage] = useState<{ text: string; kind: 'ok' | 'err' } | null>(
     null,
   );
   const [isUploading, setIsUploading] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
+  const [platform, setPlatform] = useState<SyncPlatform>('gemini');
 
-  // Fetch sync state on mount
+  // Detect current platform from active tab URL
+  const detectPlatform = useCallback(async (): Promise<SyncPlatform> => {
+    try {
+      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+      if (tab?.url?.includes('aistudio.google.com') || tab?.url?.includes('aistudio.google.cn')) {
+        return 'aistudio';
+      }
+    } catch (e) {
+      console.warn('[CloudSyncSettings] Failed to detect platform:', e);
+    }
+    return 'gemini';
+  }, []);
+
+  // Fetch sync state and detect platform on mount
   useEffect(() => {
     const fetchState = async () => {
       try {
@@ -34,8 +52,14 @@ export function CloudSyncSettings() {
         console.error('[CloudSyncSettings] Failed to get sync state:', error);
       }
     };
+    const initPlatform = async () => {
+      const detected = await detectPlatform();
+      setPlatform(detected);
+      console.log('[CloudSyncSettings] Detected platform:', detected);
+    };
     fetchState();
-  }, []);
+    initPlatform();
+  }, [detectPlatform]);
 
   // Format timestamp for display
   const formatLastSync = useCallback(
@@ -110,22 +134,6 @@ export function CloudSyncSettings() {
     }
   }, []);
 
-  // Handle sign in
-  const handleSignIn = useCallback(async () => {
-    setStatusMessage(null);
-    try {
-      const response = await chrome.runtime.sendMessage({ type: 'gv.sync.authenticate' });
-      if (response?.ok && response.state) {
-        setSyncState(response.state);
-      } else {
-        setStatusMessage({ text: response?.error || 'Authentication failed', kind: 'err' });
-      }
-    } catch (error) {
-      console.error('[CloudSyncSettings] Authentication failed:', error);
-      setStatusMessage({ text: 'Authentication failed', kind: 'err' });
-    }
-  }, []);
-
   // Handle sign out
   const handleSignOut = useCallback(async () => {
     try {
@@ -154,8 +162,8 @@ export function CloudSyncSettings() {
       }
 
       // Get current data - prioritizing active tab content script for folders
-      let folders = { folders: [], folderContents: {} };
-      let prompts: any[] = [];
+      let folders: FolderData = { folders: [], folderContents: {} };
+      let prompts: PromptItem[] = [];
 
       // 1. Try to get fresh folder data from active tab
       try {
@@ -165,7 +173,7 @@ export function CloudSyncSettings() {
           const response = (await Promise.race([
             chrome.tabs.sendMessage(tab.id, { type: 'gv.sync.requestData' }),
             new Promise((_, reject) => setTimeout(() => reject('Timeout'), 500)),
-          ])) as any;
+          ])) as { ok?: boolean; data?: FolderData } | null;
 
           if (response?.ok && response.data) {
             folders = response.data;
@@ -176,21 +184,19 @@ export function CloudSyncSettings() {
         console.log('[CloudSyncSettings] Tab fetch failed/skipped:', e);
       }
 
-      // 2. Fallback to storage
+      // 2. Fallback to storage (use platform-specific storage key)
       try {
-        const storageResult = await chrome.storage.local.get(['gvFolderData', 'gvPromptItems']);
+        const folderStorageKey = platform === 'aistudio' ? 'gvFolderDataAIStudio' : 'gvFolderData';
+        const storageResult = await chrome.storage.local.get([folderStorageKey, 'gvPromptItems']);
 
         // Only use storage folders if we didn't get them from tab
-        if (
-          (!folders.folders || (folders.folders as any[]).length === 0) &&
-          storageResult.gvFolderData
-        ) {
-          folders = storageResult.gvFolderData;
-          console.log('[CloudSyncSettings] Loaded folders from chrome.storage.local (fallback)');
+        if ((!folders.folders || folders.folders.length === 0) && storageResult[folderStorageKey]) {
+          folders = storageResult[folderStorageKey];
+          console.log(`[CloudSyncSettings] Loaded folders from ${folderStorageKey} (fallback)`);
         }
 
-        // Prompts usually sync well to storage
-        if (storageResult.gvPromptItems) {
+        // Prompts usually sync well to storage (only for Gemini)
+        if (platform === 'gemini' && storageResult.gvPromptItems) {
           prompts = storageResult.gvPromptItems;
         }
       } catch (err) {
@@ -198,16 +204,15 @@ export function CloudSyncSettings() {
       }
 
       console.log(
-        '[CloudSyncSettings] Uploading folders:',
-        (folders.folders as any[])?.length || 0,
-        'prompts:',
-        prompts.length,
+        `[CloudSyncSettings] Uploading ${platform} folders:`,
+        folders.folders?.length || 0,
+        platform === 'gemini' ? `prompts: ${prompts.length}` : '(prompts skipped for AI Studio)',
       );
 
-      // Upload to Google Drive
+      // Upload to Google Drive with platform info
       const response = await chrome.runtime.sendMessage({
         type: 'gv.sync.upload',
-        payload: { folders, prompts },
+        payload: { folders, prompts, platform },
       });
 
       if (response?.ok) {
@@ -223,7 +228,7 @@ export function CloudSyncSettings() {
     } finally {
       setIsUploading(false);
     }
-  }, [syncState.isAuthenticated, t]);
+  }, [syncState.isAuthenticated, t, platform]);
 
   // Handle download from Drive (restore data) - NOW MERGES instead of overwrite
   const handleDownloadFromDrive = useCallback(async () => {
@@ -240,8 +245,11 @@ export function CloudSyncSettings() {
         setSyncState(authResponse.state);
       }
 
-      // Download from Google Drive
-      const response = await chrome.runtime.sendMessage({ type: 'gv.sync.download' });
+      // Download from Google Drive (platform-specific)
+      const response = await chrome.runtime.sendMessage({
+        type: 'gv.sync.download',
+        payload: { platform },
+      });
 
       if (!response?.ok) {
         throw new Error(response?.error || t('syncDownloadFailed'));
@@ -254,8 +262,8 @@ export function CloudSyncSettings() {
       }
 
       // Get current local data for merging - prioritize Content Script
-      let localFolders = { folders: [], folderContents: {} };
-      let localPrompts: any[] = [];
+      let localFolders: FolderData = { folders: [], folderContents: {} };
+      let localPrompts: PromptItem[] = [];
 
       // 1. Try to get fresh folder data from active tab
       try {
@@ -265,7 +273,7 @@ export function CloudSyncSettings() {
           const tabResponse = (await Promise.race([
             chrome.tabs.sendMessage(tab.id, { type: 'gv.sync.requestData' }),
             new Promise((_, reject) => setTimeout(() => reject('Timeout after 2s'), 2000)),
-          ])) as any;
+          ])) as { ok?: boolean; data?: FolderData } | null;
 
           console.log('[CloudSyncSettings] Tab response:', tabResponse);
           if (tabResponse?.ok && tabResponse.data) {
@@ -283,36 +291,40 @@ export function CloudSyncSettings() {
         console.warn('[CloudSyncSettings] Tab fetch failed/skipped:', e);
       }
 
-      // 2. Fallback to storage
+      // 2. Fallback to storage (use platform-specific storage key)
       try {
-        const storageResult = await chrome.storage.local.get(['gvFolderData', 'gvPromptItems']);
+        const folderStorageKey = platform === 'aistudio' ? 'gvFolderDataAIStudio' : 'gvFolderData';
+        const storageResult = await chrome.storage.local.get([folderStorageKey, 'gvPromptItems']);
 
         // Only use storage folders if we didn't get them from tab
         if (
-          (!localFolders.folders || (localFolders.folders as any[]).length === 0) &&
-          storageResult.gvFolderData
+          (!localFolders.folders || localFolders.folders.length === 0) &&
+          storageResult[folderStorageKey]
         ) {
-          localFolders = storageResult.gvFolderData;
-          console.log('[CloudSyncSettings] Loaded folders from chrome.storage.local (fallback)');
+          localFolders = storageResult[folderStorageKey];
+          console.log(`[CloudSyncSettings] Loaded folders from ${folderStorageKey} (fallback)`);
         }
 
-        if (storageResult.gvPromptItems) {
+        // Prompts only for Gemini platform
+        if (platform === 'gemini' && storageResult.gvPromptItems) {
           localPrompts = storageResult.gvPromptItems;
         }
       } catch (err) {
         console.error('[CloudSyncSettings] Error loading local data for merge:', err);
       }
 
-      // SyncData contains FolderExportPayload.data and PromptExportPayload.items
-      const { folders: cloudFoldersPayload, prompts: cloudPromptsPayload } = response.data;
+      // SyncData contains FolderExportPayload.data, PromptExportPayload.items, and StarredExportPayload.data
+      const {
+        folders: cloudFoldersPayload,
+        prompts: cloudPromptsPayload,
+        starred: cloudStarredPayload,
+      } = response.data;
       const cloudFolderData = cloudFoldersPayload?.data || { folders: [], folderContents: {} };
       const cloudPromptItems = cloudPromptsPayload?.items || [];
+      const cloudStarredData = cloudStarredPayload?.data || { messages: {} };
 
       console.log('[CloudSyncSettings] === MERGE DEBUG ===');
-      console.log(
-        '[CloudSyncSettings] Local folders count:',
-        (localFolders.folders as any[])?.length || 0,
-      );
+      console.log('[CloudSyncSettings] Local folders count:', localFolders.folders?.length || 0);
       console.log(
         '[CloudSyncSettings] Local folderContents:',
         JSON.stringify(Object.keys(localFolders.folderContents || {})),
@@ -322,22 +334,51 @@ export function CloudSyncSettings() {
         '[CloudSyncSettings] Cloud folderContents:',
         JSON.stringify(Object.keys(cloudFolderData.folderContents || {})),
       );
+      console.log(
+        '[CloudSyncSettings] Cloud starred conversations:',
+        Object.keys(cloudStarredData.messages || {}).length,
+      );
+
+      // Get local starred messages for merge
+      let localStarred = { messages: {} };
+      try {
+        const starredResult = await chrome.storage.local.get(['geminiTimelineStarredMessages']);
+        if (starredResult.geminiTimelineStarredMessages) {
+          localStarred = starredResult.geminiTimelineStarredMessages;
+        }
+      } catch (err) {
+        console.warn('[CloudSyncSettings] Could not get local starred messages:', err);
+      }
 
       // Perform Merge
-      const mergedFolders = mergeFolderData(localFolders as any, cloudFolderData);
+      const mergedFolders = mergeFolderData(localFolders, cloudFolderData);
       const mergedPrompts = mergePrompts(localPrompts, cloudPromptItems);
+      const mergedStarred = mergeStarredMessages(localStarred, cloudStarredData);
 
       console.log('[CloudSyncSettings] Merged folders count:', mergedFolders.folders?.length || 0);
       console.log(
         '[CloudSyncSettings] Merged folderContents:',
         JSON.stringify(Object.keys(mergedFolders.folderContents || {})),
       );
+      console.log(
+        '[CloudSyncSettings] Merged starred conversations:',
+        Object.keys(mergedStarred.messages || {}).length,
+      );
       console.log('[CloudSyncSettings] === END MERGE DEBUG ===');
 
-      await chrome.storage.local.set({
-        gvFolderData: mergedFolders,
-        gvPromptItems: mergedPrompts,
-      });
+      // Save merged data to storage (platform-specific storage key for folders)
+      const folderStorageKey = platform === 'aistudio' ? 'gvFolderDataAIStudio' : 'gvFolderData';
+      const storageUpdate: Record<string, unknown> = {
+        [folderStorageKey]: mergedFolders,
+      };
+
+      // Only save prompts and starred for Gemini platform
+      if (platform === 'gemini') {
+        storageUpdate.gvPromptItems = mergedPrompts;
+        storageUpdate.geminiTimelineStarredMessages = mergedStarred;
+      }
+
+      await chrome.storage.local.set(storageUpdate);
 
       // Notify content script to reload folders
       try {
@@ -359,7 +400,7 @@ export function CloudSyncSettings() {
     } finally {
       setIsDownloading(false);
     }
-  }, [syncState.isAuthenticated, t]);
+  }, [syncState.isAuthenticated, t, platform]);
 
   // Clear status message after 3 seconds
   useEffect(() => {
@@ -368,6 +409,9 @@ export function CloudSyncSettings() {
       return () => clearTimeout(timer);
     }
   }, [statusMessage]);
+
+  // Don't render on Safari
+  if (isSafariBrowser) return null;
 
   return (
     <Card className="p-4 transition-shadow hover:shadow-lg">
@@ -498,10 +542,25 @@ export function CloudSyncSettings() {
               </Button>
             </div>
 
-            {/* Sync Times */}
+            {/* Platform Indicator & Sync Times */}
             <div className="text-muted-foreground space-y-0.5 text-center text-xs">
-              <p>↑ {formatLastUpload(syncState.lastUploadTime)}</p>
-              <p>↓ {formatLastSync(syncState.lastSyncTime)}</p>
+              <p className="text-foreground/70 font-medium">
+                {platform === 'aistudio' ? '📊 AI Studio' : '✨ Gemini'}
+              </p>
+              <p>
+                ↑{' '}
+                {formatLastUpload(
+                  platform === 'aistudio'
+                    ? syncState.lastUploadTimeAIStudio
+                    : syncState.lastUploadTime,
+                )}
+              </p>
+              <p>
+                ↓{' '}
+                {formatLastSync(
+                  platform === 'aistudio' ? syncState.lastSyncTimeAIStudio : syncState.lastSyncTime,
+                )}
+              </p>
             </div>
 
             {/* Sign Out Button - Only show if authenticated */}

@@ -14,8 +14,11 @@ export default [
       'docs/.vitepress/dist/**',
       'coverage/**',
       'gemini-voyager-sync/**',
+      'gemini-voyager-formal/**',
       '.github/sponsors/**',
       'public/**',
+      'safari/Models/**',
+      'Gemini Voyager/**',
     ],
   },
 

@@ -1,5 +1,9 @@
 # التثبيت
 
+::: info أخبار
+🍎 **إضافة Safari الأصلية تم إطلاقها!** هي مجانية بالكامل وتدعم التثبيت بنقرة واحدة.
+:::
+
 اختر طريقك.
 
 > ⚠️ ملاحظة: مدير المطالبات هو الميزة الوحيدة التي تدعم Gemini للمؤسسات.
@@ -10,7 +14,7 @@
 
 **Chrome / Brave / Opera / Vivaldi:**
 
-[<img src="https://img.shields.io/badge/Chrome_Web_Store-Download-4285F4?style=for-the-badge&logo=google-chrome&logoColor=white" alt="التثبيت من سوق Chrome الإلكتروني" height="40"/>](https://chromewebstore.google.com/detail/kjdpnimcnfinmilocccippmododhceol)
+[<img src="https://img.shields.io/badge/Chrome_Web_Store-Download-4285F4?style=for-the-badge&logo=google-chrome&logoColor=white" alt="التثبيت من سوق Chrome الإلكتروني" height="40"/>](https://chromewebstore.google.com/detail/kjdpnimcnfinmilocccippmododhceol?utm_source=github&utm_medium=docs&utm_campaign=organic_growth&utm_content=ar)
 
 **Microsoft Edge:**
 
@@ -42,14 +46,16 @@
 
 ## 3. Safari (macOS)
 
-1. قم بتنزيل `gemini-voyager-safari-vX.Y.Z.zip` من [الإصدارات](https://github.com/Nagi-ovo/gemini-voyager/releases).
-2. قم بفك ضغط الملف.
-3. قم بتشغيل الأمر التالي في Terminal لتحويله (يتطلب Xcode):
-   ```bash
-   xcrun safari-web-extension-converter dist_safari --macos-only --app-name "Gemini Voyager"
-   ```
-4. قم بتشغيل التطبيق في Xcode للتثبيت.
-5. قم بالتمكين في إعدادات Safari > الإضافات.
+Safari يدعم الآن التوزيع المباشر! قم بتنزيل التطبيق الموقع مسبقاً:
+
+1. قم بتنزيل <SafariDownloadLink>أحدث إصدار Safari (.dmg)</SafariDownloadLink>.
+2. افتح الملف واتبع تعليمات التثبيت.
+3. انقر نقراً مزدوجاً لتشغيل التطبيق.
+4. قم بالتفعيل في **إعدادات Safari > الإضافات**.
+
+> 💡 إصدار Safari موقع مباشرة للتوزيع — لا حاجة لتحويل Xcode!
+>
+> ⚠️ **القيود**: نظرًا لطبيعة Safari، فإن (أ) إزالة العلامة المائية (ب) تصدير الصور (يُنصح باستخدام PDF) غير مدعومة.
 
 ---
 

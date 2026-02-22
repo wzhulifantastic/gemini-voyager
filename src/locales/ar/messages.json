@@ -4,7 +4,7 @@
     "description": "Extension name"
   },
   "extDescription": {
-    "message": "عزز تجربتك في Gemini من خلال التنقل عبر الجدول الزمني، وتنظيم المجلدات، ومخزن المطالبات، وتصدير الدردشة.",
+    "message": "عزز تجربة Gemini: جدول زمني، مجلدات، مطالبات، وتصدير.",
     "description": "Extension description"
   },
   "scrollMode": {
@@ -228,7 +228,7 @@
     "description": "Official docs link"
   },
   "exportChatJson": {
-    "message": "تصدير سجل الدردشة",
+    "message": "تصدير سجل المحادثة",
     "description": "Tooltip for export button"
   },
   "folder_title": {
@@ -298,6 +298,10 @@
   "folder_color_pink": {
     "message": "وردي",
     "description": "Pink folder color name"
+  },
+  "folder_color_custom": {
+    "message": "مخصص",
+    "description": "Custom folder color name"
   },
   "folder_empty": {
     "message": "لا توجد مجلدات حتى الآن",
@@ -383,9 +387,25 @@
     "message": "LaTeX (بدون علامة الدولار)",
     "description": "LaTeX format option without dollar signs"
   },
+  "folder_filter_current_user": {
+    "message": "عزل الحساب",
+    "description": "Show only conversations from the current Google account"
+  },
   "folder_export": {
     "message": "تصدير المجلدات",
     "description": "Export folders button tooltip"
+  },
+  "folder_import_export": {
+    "message": "استيراد/تصدير المجلدات",
+    "description": "Combined import/export button tooltip"
+  },
+  "folder_cloud_upload": {
+    "message": "رفع إلى السحابة",
+    "description": "Cloud upload button tooltip"
+  },
+  "folder_cloud_sync": {
+    "message": "مزامنة من السحابة",
+    "description": "Cloud sync button tooltip"
   },
   "folder_import": {
     "message": "استيراد المجلدات",
@@ -444,8 +464,32 @@
     "description": "Export format selection label"
   },
   "export_dialog_warning": {
-    "message": "⚠️ نظرًا للتحميل البطيء للرسائل القديمة في Gemini، يرجى استخدام الجدول الزمني للانتقال إلى الرسالة الأولى في المحادثة قبل التصدير. وإلا فقد يكون التصدير غير مكتمل.",
-    "description": "Warning about lazy loading affecting export completeness"
+    "message": "⚠️ بعد النقر على تصدير، سيقفز النظام تلقائياً إلى الرسالة الأولى لتحميل المحتوى بالكامل. يرجى عدم إجراء أي عمليات؛ سيستمر التصدير تلقائياً بعد القفز.",
+    "description": "Warning about auto-jump and loading completeness"
+  },
+  "export_dialog_safari_cmdp_hint": {
+    "message": "نصيحة Safari: انقر فوق 'تصدير' أدناه، وانتظر لحظة، ثم اضغط على ⌘P واختر 'حفظ بتنسيق PDF'.",
+    "description": "Safari-specific hint for PDF export"
+  },
+  "export_toast_safari_pdf_ready": {
+    "message": "يمكنك الآن الضغط على Command + P لتصدير ملف PDF.",
+    "description": "Safari-specific toast shown after PDF export is prepared"
+  },
+  "export_dialog_safari_markdown_hint": {
+    "message": "تنبيه: بسبب قيود Safari، لا يمكن استخراج الصور من سجل المحادثة. للحصول على تصدير كامل، يُنصح باستخدام تصدير PDF.",
+    "description": "Warning about image references in Safari markdown export"
+  },
+  "export_format_json_description": {
+    "message": "تنسيق مقروء آلياً للمطورين",
+    "description": "Description for JSON export format"
+  },
+  "export_format_markdown_description": {
+    "message": "تنسيق نصي نظيف ومحمول (موصى به)",
+    "description": "Description for Markdown export format"
+  },
+  "export_format_pdf_description": {
+    "message": "تنسيق مناسب للطباعة عبر حفظ بتنسيق PDF",
+    "description": "Description for PDF export format"
   },
   "editInputWidth": {
     "message": "عرض حقل التحرير",
@@ -747,6 +791,14 @@
     "message": "Cmd/Win",
     "description": "Meta/Command/Windows modifier key"
   },
+  "preventAutoScroll": {
+    "message": "منع التمرير التلقائي",
+    "description": "Auto-hide sidebar toggle label"
+  },
+  "preventAutoScrollHint": {
+    "message": "يمنع المتصفح من القفز إلى الأسفل عند الضغط على مفتاح الإدخال أثناء قراءة المحادثات السابقة.",
+    "description": "Auto-hide sidebar feature hint"
+  },
   "cloudSync": {
     "message": "مزامنة سحابية",
     "description": "Cloud sync section title"
@@ -798,6 +850,22 @@
   "syncInProgress": {
     "message": "جارٍ المزامنة...",
     "description": "Sync in progress message"
+  },
+  "uploadInProgress": {
+    "message": "Uploading...",
+    "description": "Upload in progress message"
+  },
+  "uploadSuccess": {
+    "message": "✓ Uploaded successfully",
+    "description": "Upload success message"
+  },
+  "downloadInProgress": {
+    "message": "Downloading...",
+    "description": "Download in progress message"
+  },
+  "downloadMergeSuccess": {
+    "message": "✓ Downloaded and merged",
+    "description": "Download and merge success message"
   },
   "syncUpload": {
     "message": "رفع",
@@ -891,13 +959,25 @@
     "message": "توسيع",
     "description": "Expand children"
   },
+  "timelinePreviewSearch": {
+    "message": "...بحث",
+    "description": "Timeline preview panel search placeholder"
+  },
+  "timelinePreviewNoResults": {
+    "message": "لا توجد نتائج",
+    "description": "Timeline preview panel no search results"
+  },
+  "timelinePreviewNoMessages": {
+    "message": "لا توجد رسائل",
+    "description": "Timeline preview panel no messages"
+  },
   "quoteReply": {
     "message": "رد باقتباس",
     "description": "Quote reply button text"
   },
   "inputCollapseOptions": {
-    "message": "طي الإدخال",
-    "description": "Input collapse options section label"
+    "message": "خيارات الإدخال",
+    "description": "Input options section label"
   },
   "enableInputCollapse": {
     "message": "تمكين طي الإدخال",
@@ -910,6 +990,14 @@
   "inputCollapsePlaceholder": {
     "message": "راسل Gemini",
     "description": "Placeholder text shown in collapsed input"
+  },
+  "ctrlEnterSend": {
+    "message": "Ctrl+Enter للإرسال",
+    "description": "Ctrl+Enter to send toggle label"
+  },
+  "ctrlEnterSendHint": {
+    "message": "اضغط Ctrl+Enter لإرسال الرسائل، Enter لإضافة سطر جديد",
+    "description": "Ctrl+Enter to send feature hint"
   },
   "batch_delete_confirm": {
     "message": "هل أنت متأكد من أنك تريد حذف {count} محادثة؟ لا يمكن التراجع عن هذا الإجراء.",
@@ -1026,5 +1114,149 @@
   "downloadError": {
     "message": "فشل",
     "description": "Status prefix when download fails"
+  },
+  "recentsHide": {
+    "message": "إخفاء العناصر الأخيرة",
+    "description": "تلميح لإخفاء قسم العناصر الأخيرة"
+  },
+  "recentsShow": {
+    "message": "إظهار العناصر الأخيرة",
+    "description": "تلميح لإظهار قسم العناصر الأخيرة"
+  },
+  "gemsHide": {
+    "message": "إخفاء Gems",
+    "description": "تلميح لإخفاء قسم قائمة Gems"
+  },
+  "gemsShow": {
+    "message": "إظهار Gems",
+    "description": "تلميح لإظهار قسم قائمة Gems"
+  },
+  "setAsDefaultModel": {
+    "message": "Set as default model",
+    "description": "Tooltip for setting default model"
+  },
+  "cancelDefaultModel": {
+    "message": "Cancel default model",
+    "description": "Tooltip for cancelling default model"
+  },
+  "defaultModelSet": {
+    "message": "Default model set: $1",
+    "description": "Toast message when default model is set"
+  },
+  "defaultModelCleared": {
+    "message": "Default model cleared",
+    "description": "Toast message when default model is cleared"
+  },
+  "sidebarAutoHide": {
+    "message": "إخفاء الشريط الجانبي تلقائياً",
+    "description": "Auto-hide sidebar toggle label"
+  },
+  "sidebarAutoHideHint": {
+    "message": "طي الشريط الجانبي تلقائياً عند مغادرة الماوس، وتوسيعه عند الدخول",
+    "description": "Auto-hide sidebar feature hint"
+  },
+  "folderSpacing": {
+    "message": "تباعد المجلدات",
+    "description": "Folder spacing adjustment label"
+  },
+  "folderSpacingCompact": {
+    "message": "مضغوط",
+    "description": "Compact folder spacing label"
+  },
+  "folderSpacingSpacious": {
+    "message": "واسع",
+    "description": "Spacious folder spacing label"
+  },
+  "folderTreeIndent": {
+    "message": "إزاحة المجلدات الفرعية",
+    "description": "Subfolder tree indentation adjustment label"
+  },
+  "folderTreeIndentCompact": {
+    "message": "أضيق",
+    "description": "Narrow subfolder indentation label"
+  },
+  "folderTreeIndentSpacious": {
+    "message": "أوسع",
+    "description": "Wide subfolder indentation label"
+  },
+  "export_select_mode_select_all": {
+    "message": "Select all",
+    "description": "Selection mode select all toggle"
+  },
+  "export_select_mode_count": {
+    "message": "Selected {count}",
+    "description": "Selection mode selected message count"
+  },
+  "export_select_mode_toggle": {
+    "message": "Select message",
+    "description": "Selection mode per-message toggle tooltip"
+  },
+  "export_select_mode_select_below": {
+    "message": "Select messages below",
+    "description": "Selection mode top-left button to select messages below current line"
+  },
+  "export_select_mode_empty": {
+    "message": "Please select at least one message to export.",
+    "description": "Selection mode validation when nothing is selected"
+  },
+  "export_format_image_description": {
+    "message": "صورة PNG واحدة، مناسبة للمشاركة عبر الهاتف.",
+    "description": "Description for Image export format"
+  },
+  "export_image_progress": {
+    "message": "Generating image...",
+    "description": "Progress message while generating image export"
+  },
+  "deepResearchSaveReport": {
+    "message": "Save Report",
+    "description": "Deep Research save report button"
+  },
+  "deepResearchSaveReportTooltip": {
+    "message": "Export this research report",
+    "description": "Deep Research save report tooltip"
+  },
+  "export_fontsize_label": {
+    "message": "حجم الخط",
+    "description": "Label for font size slider in export dialog"
+  },
+  "export_fontsize_preview": {
+    "message": "نص عربي لمعاينة حجم الخط في التصدير.",
+    "description": "Preview text for font size slider in export dialog"
+  },
+  "export_error_generic": {
+    "message": "فشل التصدير: {error}",
+    "description": "رسالة فشل تصدير عامة مع السبب التفصيلي"
+  },
+  "export_error_refresh_retry": {
+    "message": "فشل تصدير الصورة بسبب مشكلة في الشبكة. يُرجى تحديث الصفحة ثم إعادة المحاولة.",
+    "description": "إرشاد يظهر عند فشل تحميل مؤقت أثناء تصدير الصورة"
+  },
+  "export_md_include_source_confirm": {
+    "message": "يحتوي المحتوى المُصدَّر على صور من نتائج البحث. هل تريد تضمين روابط مصدر الصور في Markdown؟",
+    "description": "Confirm dialog when exporting markdown with web search images"
+  },
+  "deepResearch_exportedAt": {
+    "message": "وقت التصدير",
+    "description": "تسمية الطابع الزمني للتصدير في Deep Research"
+  },
+  "deepResearch_totalPhases": {
+    "message": "إجمالي المراحل",
+    "description": "تسمية إجمالي مراحل التفكير في Deep Research"
+  },
+  "deepResearch_thinkingPhase": {
+    "message": "مرحلة التفكير",
+    "description": "عنوان مرحلة التفكير في Deep Research"
+  },
+  "deepResearch_researchedWebsites": {
+    "message": "المواقع المبحوثة",
+    "description": "عنوان قسم المواقع المبحوثة في Deep Research"
+  },
+  "snowEffect": {
+    "message": "تأثير الثلج",
+    "description": "Snow effect toggle label"
+  },
+  "snowEffectHint": {
+    "message": "اجعل الثلج يتساقط على الصفحة لأجواء شتوية",
+    "description": "Snow effect feature hint"
   }
 }

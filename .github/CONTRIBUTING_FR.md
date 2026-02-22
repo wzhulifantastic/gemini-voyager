@@ -117,7 +117,9 @@ bun install
    git checkout -b fix/votre-correction-de-bug
    ```
 
-2. **Gardez les modifications ciblées** - une fonctionnalité ou correction par PR
+2. **Lier les Issues** - Lors de l'implémentation d'une nouvelle fonctionnalité, vous devez **d'abord ouvrir un Issue pour discussion**. Les PR pour de nouvelles fonctionnalités soumises sans discussion préalable seront fermées. Lors de la soumission d'une PR, veuillez lier cet Issue.
+
+3. **Gardez les modifications ciblées** - une fonctionnalité ou correction par PR
 
 ### Liste de Contrôle Pré-Commit
 
@@ -267,4 +269,4 @@ Gemini Voyager améliore l'expérience de chat Gemini AI avec :
 
 ## Licence
 
-En contribuant, vous acceptez que vos contributions soient licenciées sous la [Licence MIT](../LICENSE).
+En contribuant, vous acceptez que vos contributions soient licenciées sous la [Licence GPLv3](../LICENSE).

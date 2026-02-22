@@ -15,13 +15,14 @@ globalThis.chrome = {
     },
     onChanged: {
       addListener: vi.fn(),
+      removeListener: vi.fn(),
     },
   },
   runtime: {
     lastError: null,
     id: 'test-extension-id',
   },
-} as any;
+} as unknown as typeof chrome;
 
 // Mock localStorage
 const localStorageMock = (() => {
@@ -50,7 +51,7 @@ Object.defineProperty(window, 'localStorage', {
 });
 
 // Also expose localStorage globally (not just on window)
-globalThis.localStorage = localStorageMock as any;
+globalThis.localStorage = localStorageMock as unknown as Storage;
 
 // Expose document globally
 globalThis.document = window.document;
